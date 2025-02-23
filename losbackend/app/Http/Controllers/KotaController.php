@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\RefKota;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class KotaController extends Controller
 {
 
     public function tambahKota(Request $request)
     {
-        $kota = new REfKota;
+        $kota = new RefKota;
         $kodeTerakhir = RefKota::max('Kode');
         $nomorBaru = $kodeTerakhir ? (int) substr($kodeTerakhir, 3) + 1 : 1;
+        Log::info($request->input('provinsi_id'));
         $kota->Kode = sprintf('WKB%07d', $nomorBaru);
         $kota->Keterangan = $request->input('Keterangan');
+        $kota->provinsi_id = $request->input('provinsi_id'); //tambah id provinsi
         $kota->save();
 
         return response()->json($kota);

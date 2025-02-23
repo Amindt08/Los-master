@@ -4,16 +4,18 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
+import { Dropdown } from 'primereact/dropdown';
 
 const DataTableWithCRUD = ({
     data,
+    data2,
     onAdd,
     onUpdate,
     onDelete,
     columns,
     idField = 'Kode',
     nameField = 'Keterangan',
-    provField ='provinsi_id',
+    nameField2 ='Kode',
     addButtonLabel = 'Tambah',
     editButtonLabel = 'Perbarui',
     deleteButtonLabel = 'Hapus',
@@ -21,28 +23,29 @@ const DataTableWithCRUD = ({
     editDialogHeader = 'Edit Data',
     deleteDialogHeader = 'Hapus Data',
     inputLabel = 'Data',
-    extraFields,
+    inputLabel2='Data',
 }: any) => {
     const [selectedRow, setSelectedRow] = useState<any>(null);
     const [visibleAdd, setVisibleAdd] = useState(false);
     const [visibleEdit, setVisibleEdit] = useState(false);
     const [visibleDelete, setVisibleDelete] = useState(false);
     const [inputValue, setInputValue] = useState('');
-    const [editValue, setEditValue] = useState('');
-    const [provinsi_id, setProvinsiId] = useState('');
+    const [inputValue2, setInputValue2] = useState<any>(null);
+    const [editValue, setEditValue] = useState('');    
+    const [editValue2, setEditValue2] = useState<any>(null);    
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        onAdd(inputValue, provinsi_id); // Tambahkan provinsi_id
+        onAdd(inputValue, inputValue2.Kode); // Tambah value kode dari inputValue2
         setInputValue('');
-        setProvinsiId(''); // Reset setelah submit
+        setInputValue2(null);        
         setVisibleAdd(false);
     };
 
     const handleUpdate = () => {
-        onUpdate(selectedRow[idField], editValue, provinsi_id); // Kirim provinsi_id
-        setEditValue('');
-        setProvinsiId(''); // Reset setelah update
+        onUpdate(selectedRow[idField], editValue,editValue2.Kode); // Tambah value kode dari inputValue2, seharusnya pake [namefield] soale beda tabel jadi belum tentu sama, tapi karena sama semua jdi pake kode
+        setEditValue('');        
+        setEditValue2('');        
         setVisibleEdit(false);
     };
 
@@ -60,6 +63,12 @@ const DataTableWithCRUD = ({
                     <Button icon="pi pi-pencil" style={{ color: '#000000', transition: 'transform 0.3s ease-in-out' }} className='bg-blue-200 border-transparent hover:scale-110' onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'} onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'} onClick={() => {
                         setSelectedRow(rowData);
                         setEditValue(rowData[nameField]);
+                        //mengambil kode dari row dipilih dan mencari kode yang sesuai dalam data
+                        if (Array.isArray(data2) && data2.length > 0 && rowData?.[nameField2]) {
+                            const matchedValue = data2.find(item => item.Kode === rowData?.[nameField2]) || null;
+                            //set nilai awal edit
+                            setEditValue2(matchedValue);
+                        }                 
                         setVisibleEdit(true);
                     }} />
                 )} />
@@ -81,13 +90,24 @@ const DataTableWithCRUD = ({
             <Dialog header={addDialogHeader} visible={visibleAdd} style={{ width: '90vw', maxWidth: '500px' }} onHide={() => setVisibleAdd(false)}>
                 <div className="p-fluid mb-5">
                     <form onSubmit={handleSubmit}>
-                        <div className="field">
-                            <label htmlFor="inputValue" className='font-bold'>{extraFields}</label>
-                            <InputText id="provinsi_id" value={provinsi_id} onChange={(e) => setProvinsiId(e.target.value)} required />
-                        </div>
+                    {
+                    //dropdown data parent
+                    }
+                    <div className="field " >
+                            <label htmlFor="dropdown" className='font-bold'>Pilih Opsi</label>
+                            <Dropdown
+                                id="dropdown"
+                                value={inputValue2}                            
+                                options={data2}
+                                onChange={(e) => setInputValue2(e.value)}
+                                optionLabel='Keterangan'
+                                placeholder="Pilih Opsi"
+                                className="w-full"
+                            />
+                        </div>                       
                         <div className="field">
                             <label htmlFor="inputValue" className='font-bold'>{inputLabel}</label>
-                            <InputText id="inputValue" value={inputValue} onChange={(e) => setInputValue(e.target.value)} required className="w-full sm:w-8" />
+                            <InputText id="inputValue" value={inputValue} onChange={(e) => setInputValue(e.target.value)} required className="w-full" />
                         </div>
                         <div className='flex flex-column sm:flex-row justify-content-end mt-3'>
                             <Button className='w-full sm:w-4' type="submit" label="Simpan" icon="pi pi-check" />
@@ -97,14 +117,26 @@ const DataTableWithCRUD = ({
             </Dialog>
             <Dialog header={`${editDialogHeader}: ${selectedRow?.[nameField]}`} visible={visibleEdit} style={{ width: '90vw', maxWidth: '500px' }} onHide={() => setVisibleEdit(false)}>
                 <div className="p-fluid">
+                {
+                    //dropdown edit data parent
+                    }
+                            <div className="field " >
+                                <label htmlFor="dropdown" className='font-bold'>{inputLabel2}</label>
+                                <Dropdown
+                                    id="dropdown"
+                                    value={editValue2}
+                                    options={data2}
+                                    onChange={(e) => setEditValue2(e.value)}
+                                    optionLabel='Keterangan'
+                                    placeholder="Pilih Opsi"
+                                    className="w-full"
+                                />
+                            </div> 
                     <div className="field">
                         <label htmlFor="editValue" className='font-bold'>{inputLabel}</label>
                         <InputText id="editValue" value={editValue} onChange={(e) => setEditValue(e.target.value)} required className="w-full" />
                     </div>
-                    <div className="field">
-                        <label htmlFor="provinsi_id">Provinsi</label>
-                        <InputText id="provinsi_id" value={provinsi_id} onChange={(e) => setProvinsiId(e.target.value)} />
-                    </div>
+                    
                     <div className='flex flex-column sm:flex-row justify-content-end mt-3'>
                         <Button label="Batal" icon="pi pi-times" onClick={() => setVisibleEdit(false)} className="p-button-text w-full sm:w-3 mb-2 sm:mb-0 sm:mr-2 " />
                         <Button label={editButtonLabel} icon="pi pi-check" onClick={handleUpdate} autoFocus className="w-full sm:w-3" />
