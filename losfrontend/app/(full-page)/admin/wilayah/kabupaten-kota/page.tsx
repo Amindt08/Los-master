@@ -7,6 +7,7 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 
 const TambahKota = () => {
     const [RefKota, setRefKota] = useState([]);
+    const [RefProvinsi, setRefProvinsi] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const toast = useRef<Toast>(null);
 
@@ -19,6 +20,10 @@ const TambahKota = () => {
         try {
             const kotaResponse = await axios.get(API_ENDPOINTS.GETKOTA);
             setRefKota(kotaResponse.data);
+            const provinsiResponse = await axios.get(API_ENDPOINTS.GETPROVINSI); //fetch data provinsi
+            console.log(provinsiResponse.data);
+
+            setRefProvinsi(provinsiResponse.data);
         } catch (error) {
             console.error("Error fetching data:", error);
             toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal mengambil data', life: 3000 });
@@ -29,7 +34,9 @@ const TambahKota = () => {
 
     const handleAdd = async (Keterangan: string, provinsi_id: string) => {
         try {
+            //tambah provinsi_id 
             await axios.post(API_ENDPOINTS.TAMBAHKOTA, { Keterangan, provinsi_id });
+
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Kab/Kota berhasil ditambahkan', life: 3000 });
             fetchData();
         } catch (error) {
@@ -41,6 +48,7 @@ const TambahKota = () => {
 
     const handleUpdate = async (Kode: string, Keterangan: string, provinsi_id: string) => {
         try {
+
             await axios.put(API_ENDPOINTS.UPDATEKOTA(Kode), { Keterangan, provinsi_id });
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Kab/Kota berhasil diperbarui', life: 3000 });
             fetchData();
@@ -72,6 +80,7 @@ const TambahKota = () => {
             ) : (
                 <DataTableWithCRUD
                     data={RefKota}
+                    data2={RefProvinsi} //data provinsi
                     loading={isLoading}
                     columns={[
                         { field: 'Keterangan', header: 'Kab/Kota' },
@@ -80,7 +89,9 @@ const TambahKota = () => {
                     onUpdate={handleUpdate}
                     onDelete={handleDelete}
                     nameField="Keterangan"
+                    nameField2="provinsi_id" //nama kolom dari data kota buat edit provinsi
                     inputLabel= "Kab/Kota"
+                    inputLabel2= "Provinsi"
                 />
             )}
         </>
