@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\RefKel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 class KelController extends Controller
 {
@@ -13,8 +15,10 @@ class KelController extends Controller
         $kel = new RefKel;
         $kodeTerakhir = RefKel::max('Kode');
         $nomorBaru = $kodeTerakhir ? (int) substr($kodeTerakhir, 3) + 1 : 1;
+        Log::info($request->input('kecamatan_id'));
         $kel->Kode = sprintf('WKL%07d', $nomorBaru);
         $kel->Keterangan = $request->input('Keterangan');
+        $kel->kecamatan_id = $request->input('kecamatan_id'); //tambah id kecamatan
         $kel->save();
 
         return response()->json($kel);

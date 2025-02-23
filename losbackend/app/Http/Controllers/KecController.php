@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\RefKec;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 class KecController extends Controller
 {
@@ -13,8 +15,10 @@ class KecController extends Controller
         $kec = new RefKec;
         $kodeTerakhir = RefKec::max('Kode');
         $nomorBaru = $kodeTerakhir ? (int) substr($kodeTerakhir, 3) + 1 : 1;
+        Log::info($request->input('kota_id'));
         $kec->Kode = sprintf('WKC%07d', $nomorBaru);
         $kec->Keterangan = $request->input('Keterangan');
+        $kec->kota_id = $request->input('kota_id'); //tambah id kota
         $kec->save();
 
         return response()->json($kec);

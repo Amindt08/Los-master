@@ -23,7 +23,7 @@ const TambahKel = () => {
             const kecResponse = await axios.get(API_ENDPOINTS.GETKEC);
             console.log(kecResponse.data);
 
-            setRefKel(kecResponse.data);
+            setRefKec(kecResponse.data);
         } catch (error) {
             console.error("Error fetching data:", error);
             toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal mengambil data', life: 3000 });
