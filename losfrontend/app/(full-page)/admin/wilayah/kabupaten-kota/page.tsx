@@ -92,6 +92,7 @@ const TambahKota = () => {
                     nameField2="provinsi_id" //nama kolom dari data kota buat edit provinsi
                     inputLabel= "Kab/Kota"
                     inputLabel2= "Provinsi"
+                    
                 />
             )}
         </>

@@ -74,6 +74,7 @@ const TambahNegara = () => {
                     columns={[
                         { field: 'Keterangan', header: 'Negara' }
                     ]}
+                    singleInput={true} // set false jika btuh 2 input
                     onAdd={handleAdd}
                     onUpdate={handleUpdate}
                     onDelete={handleDelete}

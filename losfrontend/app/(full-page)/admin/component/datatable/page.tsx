@@ -13,9 +13,10 @@ const DataTableWithCRUD = ({
     onUpdate,
     onDelete,
     columns,
+    singleInput=false,
     idField = 'Kode',
     nameField = 'Keterangan',
-    nameField2 ='Kode',
+    nameField2 ='provinsi_id',
     addButtonLabel = 'Tambah',
     editButtonLabel = 'Perbarui',
     deleteButtonLabel = 'Hapus',
@@ -36,16 +37,24 @@ const DataTableWithCRUD = ({
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        onAdd(inputValue, inputValue2.Kode); // Tambah value kode dari inputValue2
+        if (singleInput) {
+            onAdd(inputValue); // Send only inputValue
+        } else {
+            onAdd(inputValue, inputValue2?.[idField]);// Tambah value kode dari inputValue2
+        }
         setInputValue('');
         setInputValue2(null);        
         setVisibleAdd(false);
     };
 
     const handleUpdate = () => {
-        onUpdate(selectedRow[idField], editValue,editValue2.Kode); // Tambah value kode dari inputValue2, seharusnya pake [namefield] soale beda tabel jadi belum tentu sama, tapi karena sama semua jdi pake kode
+        if (singleInput) {
+            onUpdate(selectedRow[idField], editValue);// Send only inputValue
+        } else {
+            onUpdate(selectedRow[idField], editValue,editValue2?.[idField]);// Tambah value kode dari inputValue2
+        }
         setEditValue('');        
-        setEditValue2('');        
+        setEditValue2(null);        
         setVisibleEdit(false);
     };
 
@@ -93,18 +102,20 @@ const DataTableWithCRUD = ({
                     {
                     //dropdown data parent
                     }
-                    <div className="field " >
-                            <label htmlFor="dropdown" className='font-bold'>Pilih Opsi</label>
-                            <Dropdown
-                                id="dropdown"
-                                value={inputValue2}                            
-                                options={data2}
-                                onChange={(e) => setInputValue2(e.value)}
-                                optionLabel='Keterangan'
-                                placeholder="Pilih Opsi"
-                                className="w-full"
-                            />
-                        </div>                       
+                     {!singleInput && (
+        <div className="field">
+            <label htmlFor="dropdown" className='font-bold'>Pilih Opsi</label>
+            <Dropdown
+                id="dropdown"
+                value={inputValue2}                            
+                options={data2}
+                onChange={(e) => setInputValue2(e.value)}
+                optionLabel='Keterangan'
+                placeholder="Pilih Opsi"
+                className="w-full"
+            />
+        </div>
+    )}                                       
                         <div className="field">
                             <label htmlFor="inputValue" className='font-bold'>{inputLabel}</label>
                             <InputText id="inputValue" value={inputValue} onChange={(e) => setInputValue(e.target.value)} required className="w-full" />
@@ -120,6 +131,7 @@ const DataTableWithCRUD = ({
                 {
                     //dropdown edit data parent
                     }
+                    {!singleInput && (
                             <div className="field " >
                                 <label htmlFor="dropdown" className='font-bold'>{inputLabel2}</label>
                                 <Dropdown
@@ -131,7 +143,8 @@ const DataTableWithCRUD = ({
                                     placeholder="Pilih Opsi"
                                     className="w-full"
                                 />
-                            </div> 
+                            </div>
+                            )}  
                     <div className="field">
                         <label htmlFor="editValue" className='font-bold'>{inputLabel}</label>
                         <InputText id="editValue" value={editValue} onChange={(e) => setEditValue(e.target.value)} required className="w-full" />
