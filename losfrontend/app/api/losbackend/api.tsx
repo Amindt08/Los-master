@@ -159,19 +159,19 @@ export const API_ENDPOINTS = {
   UPDATEKOTA: (Kode: string) => `${api_url}/updateKota/${Kode}`,
   DELETEKOTA: (Kode: string) => `${api_url}/deleteKota/${Kode}`,
 
-  //Kota
+  //Kec
   GETKEC: `${api_url}/getKec`,
   TAMBAHKEC: `${api_url}/tambahKec`,
   UPDATEKEC: (Kode: string) => `${api_url}/updateKec/${Kode}`,
   DELETEKEC: (Kode: string) => `${api_url}/deleteKec/${Kode}`,
 
-  //Kota
+  //Kel
   GETKEL: `${api_url}/getKel`,
   TAMBAHKEL: `${api_url}/tambahKel`,
   UPDATEKEL: (Kode: string) => `${api_url}/updateKel/${Kode}`,
   DELETEKEL: (Kode: string) => `${api_url}/deleteKel/${Kode}`,
 
-  //Kota
+  //Kode Pos
   GETKODEPOS: `${api_url}/getKodepos`,
   TAMBAHKODEPOS: `${api_url}/tambahKodepos`,
   UPDATEKODEPOS: (Kode: string) => `${api_url}/updateKodepos/${Kode}`,

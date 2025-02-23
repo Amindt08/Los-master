@@ -7,6 +7,7 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 
 const TambahKel = () => {
     const [RefKel, setRefKel] = useState([]);
+    const [RefKec, setRefKec] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const toast = useRef<Toast>(null);
 
@@ -19,6 +20,10 @@ const TambahKel = () => {
         try {
             const kelResponse = await axios.get(API_ENDPOINTS.GETKEL);
             setRefKel(kelResponse.data);
+            const kecResponse = await axios.get(API_ENDPOINTS.GETKEC);
+            console.log(kecResponse.data);
+
+            setRefKel(kecResponse.data);
         } catch (error) {
             console.error("Error fetching data:", error);
             toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal mengambil data', life: 3000 });
@@ -27,9 +32,9 @@ const TambahKel = () => {
         }
     };
 
-    const handleAdd = async (Keterangan: string) => {
+    const handleAdd = async (Keterangan: string, kecamatan_id: string) => {
         try {
-            await axios.post(API_ENDPOINTS.TAMBAHKEL, { Keterangan });
+            await axios.post(API_ENDPOINTS.TAMBAHKEL, { Keterangan, kecamatan_id });
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Kecamatan berhasil ditambahkan', life: 3000 });
             fetchData();
         } catch (error) {
@@ -38,9 +43,9 @@ const TambahKel = () => {
         }
     };
 
-    const handleUpdate = async (Kode: string, Keterangan: string) => {
+    const handleUpdate = async (Kode: string, Keterangan: string, kecamatan_id: string) => {
         try {
-            await axios.put(API_ENDPOINTS.UPDATEKEL(Kode), { Keterangan });
+            await axios.put(API_ENDPOINTS.UPDATEKEL(Kode), { Keterangan, kecamatan_id });
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Kecamatan berhasil diupdate', life: 3000 });
             fetchData();
         } catch (error) {
@@ -70,6 +75,7 @@ const TambahKel = () => {
             ) : (
                 <DataTableWithCRUD
                     data={RefKel}
+                    data2={RefKec}
                     loading={isLoading}
                     columns={[
                         { field: 'Keterangan', header: 'Kelurahan' }
@@ -78,7 +84,9 @@ const TambahKel = () => {
                     onUpdate={handleUpdate}
                     onDelete={handleDelete}
                     nameField="Keterangan"
+                    nameField2="kecamatan_id"
                     inputLabel="Kelurahan"
+                    inputLabel2="Kecamatan"
                 />
             )}
         </>

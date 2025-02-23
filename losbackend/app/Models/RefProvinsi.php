@@ -13,6 +13,7 @@ class RefProvinsi extends Model
     protected $fillable = [
         'id',
         'Kode',
-        'Keterangan'
+        'Keterangan',
+        'negara_id'
     ];
 }

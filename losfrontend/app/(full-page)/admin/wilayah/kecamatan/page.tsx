@@ -7,6 +7,7 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 
 const TambahKec = () => {
     const [RefKec, setRefKec] = useState([]);
+    const [RefKota, setRefKota] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const toast = useRef<Toast>(null);
 
@@ -18,7 +19,12 @@ const TambahKec = () => {
         setIsLoading(true);
         try {
             const kecResponse = await axios.get(API_ENDPOINTS.GETKEC);
+            console.log("Data Kecamatan:", kecResponse.data); // Debugging
             setRefKec(kecResponse.data);
+
+            const kotaResponse = await axios.get(API_ENDPOINTS.GETKOTA); //fetch data kota
+            console.log("Data Kota:", kotaResponse.data); // Debugging
+            setRefKota(kotaResponse.data);
         } catch (error) {
             console.error("Error fetching data:", error);
             toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal mengambil data', life: 3000 });
@@ -27,9 +33,13 @@ const TambahKec = () => {
         }
     };
 
-    const handleAdd = async (Keterangan: string) => {
+    const handleAdd = async (Keterangan: string, kota_id: string) => {
         try {
-            await axios.post(API_ENDPOINTS.TAMBAHKEC, { Keterangan });
+            console.log("Mengirim data:", { Keterangan, kota_id }); // Debugging
+
+            //tambah kota_id
+            await axios.post(API_ENDPOINTS.TAMBAHKEC, { Keterangan, kota_id });
+
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Kecamatan berhasil ditambahkan', life: 3000 });
             fetchData();
         } catch (error) {
@@ -38,9 +48,9 @@ const TambahKec = () => {
         }
     };
 
-    const handleUpdate = async (Kode: string, Keterangan: string) => {
+    const handleUpdate = async (Kode: string, Keterangan: string, kota_id: string) => {
         try {
-            await axios.put(API_ENDPOINTS.UPDATEKEC(Kode), { Keterangan });
+            await axios.put(API_ENDPOINTS.UPDATEKEC(Kode), { Keterangan, kota_id });
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Kecamatan berhasil diupdate', life: 3000 });
             fetchData();
         } catch (error) {
@@ -70,6 +80,7 @@ const TambahKec = () => {
             ) : (
                 <DataTableWithCRUD
                     data={RefKec}
+                    data2={RefKota} //data kota
                     loading={isLoading}
                     columns={[
                         { field: 'Keterangan', header: 'Kecamatan' }
@@ -78,7 +89,9 @@ const TambahKec = () => {
                     onUpdate={handleUpdate}
                     onDelete={handleDelete}
                     nameField="Keterangan"
+                    nameField2="kota_id"
                     inputLabel="Kecamatan"
+                    inputLabel2="Kab/Kota"
                 />
             )}
         </>

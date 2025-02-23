@@ -13,10 +13,10 @@ const DataTableWithCRUD = ({
     onUpdate,
     onDelete,
     columns,
-    singleInput=false,
+    singleInput = false,
     idField = 'Kode',
     nameField = 'Keterangan',
-    nameField2 ='provinsi_id',
+    nameField2 = 'provinsi_id',
     addButtonLabel = 'Tambah',
     editButtonLabel = 'Perbarui',
     deleteButtonLabel = 'Hapus',
@@ -24,7 +24,7 @@ const DataTableWithCRUD = ({
     editDialogHeader = 'Edit Data',
     deleteDialogHeader = 'Hapus Data',
     inputLabel = 'Data',
-    inputLabel2='Data',
+    inputLabel2 = 'Data',
 }: any) => {
     const [selectedRow, setSelectedRow] = useState<any>(null);
     const [visibleAdd, setVisibleAdd] = useState(false);
@@ -32,8 +32,8 @@ const DataTableWithCRUD = ({
     const [visibleDelete, setVisibleDelete] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [inputValue2, setInputValue2] = useState<any>(null);
-    const [editValue, setEditValue] = useState('');    
-    const [editValue2, setEditValue2] = useState<any>(null);    
+    const [editValue, setEditValue] = useState('');
+    const [editValue2, setEditValue2] = useState<any>(null);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -43,7 +43,7 @@ const DataTableWithCRUD = ({
             onAdd(inputValue, inputValue2?.[idField]);// Tambah value kode dari inputValue2
         }
         setInputValue('');
-        setInputValue2(null);        
+        setInputValue2(null);
         setVisibleAdd(false);
     };
 
@@ -51,10 +51,10 @@ const DataTableWithCRUD = ({
         if (singleInput) {
             onUpdate(selectedRow[idField], editValue);// Send only inputValue
         } else {
-            onUpdate(selectedRow[idField], editValue,editValue2?.[idField]);// Tambah value kode dari inputValue2
+            onUpdate(selectedRow[idField], editValue, editValue2?.[idField]);// Tambah value kode dari inputValue2
         }
-        setEditValue('');        
-        setEditValue2(null);        
+        setEditValue('');
+        setEditValue2(null);
         setVisibleEdit(false);
     };
 
@@ -77,7 +77,7 @@ const DataTableWithCRUD = ({
                             const matchedValue = data2.find(item => item.Kode === rowData?.[nameField2]) || null;
                             //set nilai awal edit
                             setEditValue2(matchedValue);
-                        }                 
+                        }
                         setVisibleEdit(true);
                     }} />
                 )} />
@@ -99,26 +99,31 @@ const DataTableWithCRUD = ({
             <Dialog header={addDialogHeader} visible={visibleAdd} style={{ width: '90vw', maxWidth: '500px' }} onHide={() => setVisibleAdd(false)}>
                 <div className="p-fluid mb-5">
                     <form onSubmit={handleSubmit}>
-                    {
-                    //dropdown data parent
-                    }
-                     {!singleInput && (
-        <div className="field">
-            <label htmlFor="dropdown" className='font-bold'>Pilih Opsi</label>
-            <Dropdown
-                id="dropdown"
-                value={inputValue2}                            
-                options={data2}
-                onChange={(e) => setInputValue2(e.value)}
-                optionLabel='Keterangan'
-                placeholder="Pilih Opsi"
-                className="w-full"
-            />
-        </div>
-    )}                                       
+                        {
+                            //dropdown data parent
+                        }
+                        {!singleInput && (
+                            <div className="field">
+                                <label htmlFor="dropdown" className='font-bold'>Pilih Opsi</label>
+                                <Dropdown
+                                    id="dropdown"
+                                    value={inputValue2}
+                                    options={data2}
+                                    onChange={(e) => setInputValue2(e.value)}
+                                    optionLabel='Keterangan'
+                                    placeholder="Pilih Opsi"
+                                    className="w-full"
+                                />
+                            </div>
+                        )}
                         <div className="field">
                             <label htmlFor="inputValue" className='font-bold'>{inputLabel}</label>
-                            <InputText id="inputValue" value={inputValue} onChange={(e) => setInputValue(e.target.value)} required className="w-full" />
+                            <InputText 
+                                id="inputValue" 
+                                value={inputValue} 
+                                onChange={(e) => setInputValue(e.target.value)} 
+                                required className="w-full" 
+                            />
                         </div>
                         <div className='flex flex-column sm:flex-row justify-content-end mt-3'>
                             <Button className='w-full sm:w-4' type="submit" label="Simpan" icon="pi pi-check" />
@@ -128,28 +133,33 @@ const DataTableWithCRUD = ({
             </Dialog>
             <Dialog header={`${editDialogHeader}: ${selectedRow?.[nameField]}`} visible={visibleEdit} style={{ width: '90vw', maxWidth: '500px' }} onHide={() => setVisibleEdit(false)}>
                 <div className="p-fluid">
-                {
-                    //dropdown edit data parent
+                    {
+                        //dropdown edit data parent
                     }
                     {!singleInput && (
-                            <div className="field " >
-                                <label htmlFor="dropdown" className='font-bold'>{inputLabel2}</label>
-                                <Dropdown
-                                    id="dropdown"
-                                    value={editValue2}
-                                    options={data2}
-                                    onChange={(e) => setEditValue2(e.value)}
-                                    optionLabel='Keterangan'
-                                    placeholder="Pilih Opsi"
-                                    className="w-full"
-                                />
-                            </div>
-                            )}  
+                        <div className="field " >
+                            <label htmlFor="dropdown" className='font-bold'>{inputLabel2}</label>
+                            <Dropdown
+                                id="dropdown"
+                                value={editValue2}
+                                options={data2}
+                                onChange={(e) => setEditValue2(e.value)}
+                                optionLabel='Keterangan'
+                                placeholder="Pilih Opsi"
+                                className="w-full"
+                            />
+                        </div>
+                    )}
                     <div className="field">
                         <label htmlFor="editValue" className='font-bold'>{inputLabel}</label>
-                        <InputText id="editValue" value={editValue} onChange={(e) => setEditValue(e.target.value)} required className="w-full" />
+                        <InputText 
+                            id="editValue" 
+                            value={editValue} 
+                            onChange={(e) => setEditValue(e.target.value)} 
+                            required className="w-full"
+                        />
                     </div>
-                    
+
                     <div className='flex flex-column sm:flex-row justify-content-end mt-3'>
                         <Button label="Batal" icon="pi pi-times" onClick={() => setVisibleEdit(false)} className="p-button-text w-full sm:w-3 mb-2 sm:mb-0 sm:mr-2 " />
                         <Button label={editButtonLabel} icon="pi pi-check" onClick={handleUpdate} autoFocus className="w-full sm:w-3" />

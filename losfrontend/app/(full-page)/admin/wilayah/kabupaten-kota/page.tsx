@@ -45,10 +45,8 @@ const TambahKota = () => {
         }
     };
 
-
     const handleUpdate = async (Kode: string, Keterangan: string, provinsi_id: string) => {
         try {
-
             await axios.put(API_ENDPOINTS.UPDATEKOTA(Kode), { Keterangan, provinsi_id });
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Kab/Kota berhasil diperbarui', life: 3000 });
             fetchData();
@@ -57,7 +55,6 @@ const TambahKota = () => {
             toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal mengupdate data', life: 3000 });
         }
     };
-
 
     const handleDelete = async (Kode: string) => {
         try {
@@ -92,7 +89,6 @@ const TambahKota = () => {
                     nameField2="provinsi_id" //nama kolom dari data kota buat edit provinsi
                     inputLabel= "Kab/Kota"
                     inputLabel2= "Provinsi"
-                    
                 />
             )}
         </>

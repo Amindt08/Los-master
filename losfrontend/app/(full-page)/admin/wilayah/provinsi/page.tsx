@@ -7,6 +7,7 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 
 const TambahProvinsi = () => {
     const [RefProvinsi, setRefProvinsi] = useState([]);
+    const [RefNegara, setRefNegara] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const toast = useRef<Toast>(null);
 
@@ -19,6 +20,10 @@ const TambahProvinsi = () => {
         try {
             const provinsiResponse = await axios.get(API_ENDPOINTS.GETPROVINSI);
             setRefProvinsi(provinsiResponse.data);
+            const negaraResponse = await axios.get(API_ENDPOINTS.GETNEGARA); 
+            console.log(negaraResponse.data);
+            
+            setRefNegara(negaraResponse.data);
         } catch (error) {
             console.error("Error fetching data:", error);
             toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal mengambil data', life: 3000 });
@@ -27,9 +32,11 @@ const TambahProvinsi = () => {
         }
     };
 
-    const handleAdd = async (Keterangan: string) => {
+    const handleAdd = async (Keterangan: string, negara_id: string) => {
         try {
-            await axios.post(API_ENDPOINTS.TAMBAHPROVINSI, { Keterangan });
+            //tambah negara_id
+            await axios.post(API_ENDPOINTS.TAMBAHPROVINSI, { Keterangan, negara_id });
+
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Provinsi berhasil ditambahkan', life: 3000 });
             fetchData();
         } catch (error) {
@@ -38,9 +45,9 @@ const TambahProvinsi = () => {
         }
     };
 
-    const handleUpdate = async (Kode: string, Keterangan: string) => {
+    const handleUpdate = async (Kode: string, Keterangan: string, negara_id: string) => {
         try {
-            await axios.put(API_ENDPOINTS.UPDATEPROVINSI(Kode), { Keterangan });
+            await axios.put(API_ENDPOINTS.UPDATEPROVINSI(Kode), { Keterangan, negara_id });
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Provinsi berhasil diupdate', life: 3000 });
             fetchData();
         } catch (error) {
@@ -70,6 +77,7 @@ const TambahProvinsi = () => {
             ) : (
                 <DataTableWithCRUD
                     data={RefProvinsi}
+                    data2={RefNegara}
                     loading={isLoading}
                     columns={[
                         { field: 'Keterangan', header: 'Provinsi' }
@@ -78,7 +86,9 @@ const TambahProvinsi = () => {
                     onUpdate={handleUpdate}
                     onDelete={handleDelete}
                     nameField="Keterangan"
+                    nameField2="negara_id"
                     inputLabel="Provinsi"
+                    inputLabel2="Negara"
                 />
             )}
         </>
