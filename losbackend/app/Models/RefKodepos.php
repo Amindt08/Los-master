@@ -13,6 +13,7 @@ class RefKodepos extends Model
     protected $fillable = [
         'id',
         'Kode',
-        'Keterangan'
+        'Keterangan',
+        'kecamatan_id'
     ];
 }

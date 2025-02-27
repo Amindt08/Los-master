@@ -96,6 +96,7 @@ const TambahDataDebiturPanel = () => {
                         idField="Kode"
                         nameField="Keterangan"
                         inputLabel="Sektor Ekonomi"
+                        singleInput={true} // set false jika btuh 2 input
                     />
                     <DataTableWithCRUD
                         data={refStatusUsaha}

@@ -101,6 +101,7 @@ const TambahJaminanPanel = () => {
                         idField="Kode"
                         nameField="Keterangan"
                         inputLabel="Jenis Agunan"
+                        singleInput={true} // set false jika btuh 2 input
                     />
                     {/* <DataTableWithCRUD
                         data={refHakMilik}

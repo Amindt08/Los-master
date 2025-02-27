@@ -96,6 +96,7 @@ const TambahPengajuanPanel = () => {
                         idField="Kode"
                         nameField="Keterangan"
                         inputLabel="Bidang Usaha"
+                        singleInput={true} // set false jika btuh 2 input
                     />
                     <DataTableWithCRUD
                         data={refSifatKredit}

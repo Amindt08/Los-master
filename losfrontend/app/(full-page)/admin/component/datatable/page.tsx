@@ -104,7 +104,7 @@ const DataTableWithCRUD = ({
                         }
                         {!singleInput && (
                             <div className="field">
-                                <label htmlFor="dropdown" className='font-bold'>Pilih Opsi</label>
+                                <label htmlFor="dropdown" className='font-bold'>{inputLabel2}</label>
                                 <Dropdown
                                     id="dropdown"
                                     value={inputValue2}

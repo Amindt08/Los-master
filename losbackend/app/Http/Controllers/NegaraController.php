@@ -14,6 +14,7 @@ class NegaraController extends Controller
         $kodeTerakhir = RefNegara::max('Kode');
         $nomorBaru = $kodeTerakhir ? (int) substr($kodeTerakhir, 2) + 1 : 1;
         $negara->Kode = sprintf('WN%07d', $nomorBaru);
+        // $negara->Kode = $request->input('Kode');
         $negara->Keterangan = $request->input('Keterangan');
         $negara->save();
 

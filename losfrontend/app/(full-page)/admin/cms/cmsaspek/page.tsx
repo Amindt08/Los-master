@@ -71,6 +71,7 @@ const TambahAspekPanel = () => {
                 <DataTableWithCRUD
                     data={refTitleAspek}
                     loading={isLoading}
+                    singleInput={true} // set false jika btuh 2 input
                     columns={[
                         { field: 'Keterangan', header: 'Judul Aspek' }
                     ]}

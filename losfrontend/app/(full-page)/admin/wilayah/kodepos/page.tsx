@@ -7,6 +7,7 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 
 const TambahKodepos = () => {
     const [RefKodepos, setRefKodepos] = useState([]);
+    const [RefKec, setRefKec] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const toast = useRef<Toast>(null);
 
@@ -70,6 +71,7 @@ const TambahKodepos = () => {
             ) : (
                 <DataTableWithCRUD
                     data={RefKodepos}
+                    data2={RefKec}
                     loading={isLoading}
                     columns={[
                         { field: 'Keterangan', header: 'Kodepos' }
@@ -78,7 +80,9 @@ const TambahKodepos = () => {
                     onUpdate={handleUpdate}
                     onDelete={handleDelete}
                     nameField="Keterangan"
+                    nameField2="kecamatan_id"
                     inputLabel="Kodepos"
+                    inputLabel2="Kecamatan"
                 />
             )}
         </>

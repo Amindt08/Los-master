@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\RefKodepos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class KodeposController extends Controller
 {
@@ -11,10 +12,13 @@ class KodeposController extends Controller
     public function tambahKodepos(Request $request)
     {
         $kodepos = new RefKodepos;
-        $kodeTerakhir = RefKodepos::max('Kode');
-        $nomorBaru = $kodeTerakhir ? (int) substr($kodeTerakhir, 3) + 1 : 1;
-        $kodepos->Kode = sprintf('WKP%07d', $nomorBaru);
+        $kodepos->Kode = $request->input('Kode');
+        // $kodeTerakhir = RefKodepos::max('Kode');
+        // $nomorBaru = $kodeTerakhir ? (int) substr($kodeTerakhir, 3) + 1 : 1;
+        // $kodepos->Kode = sprintf('WKP%07d', $nomorBaru);
         $kodepos->Keterangan = $request->input('Keterangan');
+        $kodepos->kecamatan_id = $request-> input('kecamatan_id');
+        Log::info($request->input('kecamatan_id'));
         $kodepos->save();
 
         return response()->json($kodepos);
