@@ -13,9 +13,8 @@ class KotaController extends Controller
     {
         $kota = new RefKota;
         $kodeTerakhir = RefKota::max('Kode');
-        $nomorBaru = $kodeTerakhir ? (int) substr($kodeTerakhir, 3) + 1 : 1;
-        Log::info($request->input('provinsi_id'));
-        $kota->Kode = sprintf('WKB%07d', $nomorBaru);
+        $nomorBaru = $kodeTerakhir ? $kodeTerakhir + 1 : 1;
+        $kota->Kode =  $nomorBaru;
         $kota->Keterangan = $request->input('Keterangan');
         $kota->provinsi_id = $request->input('provinsi_id'); //tambah id provinsi
         $kota->save();

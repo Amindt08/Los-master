@@ -13,8 +13,8 @@ class ProvinsiController extends Controller
     {
         $provinsi = new REfProvinsi;
         $kodeTerakhir = RefProvinsi::max('Kode');
-        $nomorBaru = $kodeTerakhir ? (int) substr($kodeTerakhir, 2) + 1 : 1;
-        $provinsi->Kode = sprintf('WP%07d', $nomorBaru);
+        $nomorBaru = $kodeTerakhir ? $kodeTerakhir + 1 : 1;
+        $provinsi->Kode = $nomorBaru;
         // $provinsi->Kode = $request->input('Kode');
         $provinsi->Keterangan = $request->input('Keterangan');
         $provinsi->negara_id = $request->input('negara_id'); //tambah id negara

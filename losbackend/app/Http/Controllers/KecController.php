@@ -14,9 +14,8 @@ class KecController extends Controller
     {
         $kec = new RefKec;
         $kodeTerakhir = RefKec::max('Kode');
-        $nomorBaru = $kodeTerakhir ? (int) substr($kodeTerakhir, 3) + 1 : 1;
-        Log::info($request->input('kota_id'));
-        $kec->Kode = sprintf('WKC%07d', $nomorBaru);
+        $nomorBaru = $kodeTerakhir ? $kodeTerakhir + 1 : 1;
+        $kec->Kode = $nomorBaru;
         $kec->Keterangan = $request->input('Keterangan');
         $kec->kota_id = $request->input('kota_id'); //tambah id kota
         $kec->save();
