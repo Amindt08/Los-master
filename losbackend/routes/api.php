@@ -20,6 +20,7 @@ use App\Http\Controllers\KotaController;
 use App\Http\Controllers\KecController;
 use App\Http\Controllers\KelController;
 use App\Http\Controllers\KodeposController;
+use App\Http\Controllers\NavbarController;
 use Illuminate\Support\Facades\DB;
 
 /*
@@ -232,3 +233,9 @@ Route::post('/tambahKodepos', [KodeposController::class, 'tambahKodepos']);
 Route::get('/getKodepos', [KodeposController::class, 'getKodepos']); 
 Route::put('/updateKodepos/{Kode}', [KodeposController::class, 'updateKodepos']); 
 Route::delete('/deleteKodepos/{Kode}', [KodeposController::class, 'deleteKodepos']); 
+
+//navbar
+Route::post('/tambahNavbar', [NavbarController::class, 'tambahNavbar']);
+Route::get('/getNavbar', [NavbarController::class, 'getNavbar']); 
+Route::put('/updateNavbar/{Kode}', [NavbarController::class, 'updateNavbar']); 
+Route::delete('/deleteNavbar/{Kode}', [NavbarController::class, 'deleteNavbar']); 

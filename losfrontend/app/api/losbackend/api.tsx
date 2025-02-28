@@ -176,4 +176,10 @@ export const API_ENDPOINTS = {
   TAMBAHKODEPOS: `${api_url}/tambahKodepos`,
   UPDATEKODEPOS: (Kode: string) => `${api_url}/updateKodepos/${Kode}`,
   DELETEKODEPOS: (Kode: string) => `${api_url}/deleteKodepos/${Kode}`,
+
+  //Navbar
+  GETNAVBAR: `${api_url}/getNavbar`,
+  TAMBAHNAVBAR: `${api_url}/tambahNavbar`,
+  UPDATENAVBAR: (Kode: string) => `${api_url}/updateNavbar/${Kode}`,
+  DELETENAVBAR: (Kode: string) => `${api_url}/deleteNavbar/${Kode}`,
 };
