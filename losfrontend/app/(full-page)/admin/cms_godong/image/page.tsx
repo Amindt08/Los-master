@@ -4,11 +4,15 @@ import axios from 'axios';
 import { API_ENDPOINTS } from '@/app/api/losbackend/api';
 import DataTableWithCRUD from '@/app/(full-page)/admin/component/datatable/page';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import DataTableImage from '../../component/datatable2/page';
 
-const TambahNavbar = () => {
-    const [Navbar, setNavbar] = useState([]);
+const TambahGambar = () => {
+    const [Image, setImage] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const toast = useRef<Toast>(null);
+    // const [formData, setFormData] = useState ([
+    //     image: ''
+    // ])
 
     useEffect(() => {
         fetchData();
@@ -17,8 +21,8 @@ const TambahNavbar = () => {
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            const navbarResponse = await axios.get(API_ENDPOINTS.GETNAVBAR);
-            setNavbar(navbarResponse.data);
+            const imageResponse = await axios.get(API_ENDPOINTS.GETIMAGE);
+            setImage(imageResponse.data);
         } catch (error) {
             console.error("Error fetching data:", error);
             toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal mengambil data', life: 3000 });
@@ -27,36 +31,48 @@ const TambahNavbar = () => {
         }
     };
 
-    const handleAdd = async (label: string) => {
+    const handleAdd = async (Image: File) => {
         try {
-            await axios.post(API_ENDPOINTS.TAMBAHNAVBAR, { label });
-            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Navbar berhasil ditambahkan', life: 3000 });
+            const formData = new FormData();
+            formData.append("Image", Image);
+
+            await axios.post(API_ENDPOINTS.TAMBAHIMAGE, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Gambar berhasil ditambahkan', life: 3000 });
             fetchData();
         } catch (error) {
             console.error('Error adding data:', error);
-            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal menambahkan data', life: 3000 });
+            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal menambahkan gambar', life: 3000 });
         }
     };
 
-    const handleUpdate = async (Kode: string, label: string) => {
+    const handleUpdate = async (Kode: string, Image: File) => {
         try {
-            await axios.put(API_ENDPOINTS.UPDATENAVBAR(Kode), { label });
-            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Navbar berhasil diupdate', life: 3000 });
+            const formData = new FormData();
+            formData.append("Image", Image);
+
+            await axios.post(API_ENDPOINTS.UPDATEIMAGE(Kode), formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Gambar berhasil diperbarui', life: 3000 });
             fetchData();
         } catch (error) {
             console.error('Error updating data:', error);
-            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal mengupdate data', life: 3000 });
+            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal memperbarui gambar', life: 3000 });
         }
     };
 
     const handleDelete = async (Kode: string) => {
         try {
-            await axios.delete(API_ENDPOINTS.DELETENAVBAR(Kode));
-            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Navbar berhasil dihapus', life: 3000 });
+            await axios.delete(API_ENDPOINTS.DELETEIMAGE(Kode));
+            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Gambar berhasil dihapus', life: 3000 });
             fetchData();
         } catch (error) {
             console.error('Error deleting data:', error);
-            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal menghapus data', life: 3000 });
+            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal menghapus gambar', life: 3000 });
         }
     };
 
@@ -68,23 +84,22 @@ const TambahNavbar = () => {
                     <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="7" fill="var(--surface-ground)" animationDuration=".5s" />
                 </div>
             ) : (
-                <DataTableWithCRUD
-                    data={Navbar}
+                <DataTableImage
+                    data={Image}
                     loading={isLoading}
                     singleInput={true} // set false jika btuh 2 input
-                    imageInput={true}
                     columns={[
-                        { field: 'label', header: 'Navbar' }
+                        { field: 'Image', header: 'Image', }
                     ]}
                     onAdd={handleAdd}
                     onUpdate={handleUpdate}
                     onDelete={handleDelete}
-                    nameField="label"
-                    inputLabel="Navbar"
+                    nameField="Image"
+                    inputLabel="Image"
                 />
             )}
         </>
     );
 };
 
-export default TambahNavbar;
+export default TambahGambar;

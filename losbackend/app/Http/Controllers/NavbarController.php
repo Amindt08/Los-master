@@ -25,7 +25,7 @@ class NavbarController extends Controller
     {
         $navbar = Navbar::all();
         return response()->json($navbar);
-    }
+    }   
 
     public function updateNavbar(Request $request, string $id)
     {

@@ -182,4 +182,16 @@ export const API_ENDPOINTS = {
   TAMBAHNAVBAR: `${api_url}/tambahNavbar`,
   UPDATENAVBAR: (Kode: string) => `${api_url}/updateNavbar/${Kode}`,
   DELETENAVBAR: (Kode: string) => `${api_url}/deleteNavbar/${Kode}`,
+
+  //Gambar
+  GETIMAGE: `${api_url}/getImage`,
+  TAMBAHIMAGE: `${api_url}/tambahImage`,
+  UPDATEIMAGE: (Kode: string) => `${api_url}/updateImage/${Kode}`,
+  DELETEIMAGE: (Kode: string) => `${api_url}/deleteImage/${Kode}`,
+
+  //Deskripsi
+  GETDESKRIPSI: `${api_url}/getDeskripsi`,
+  TAMBAHDESKRIPSI: `${api_url}/tambahDeskripsi`,
+  UPDATEDESKRIPSI: (Kode: string) => `${api_url}/updateDeskripsi/${Kode}`,
+  DELETEDESKRIPSI: (Kode: string) => `${api_url}/deleteDeskripsi/${Kode}`,
 };

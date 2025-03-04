@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AspekFormController;
 use App\Http\Controllers\FinansialController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\JaminanController;
 use App\Http\Controllers\LimaC_Controller;
 use App\Http\Controllers\Pemohon2Controller;
@@ -21,6 +22,7 @@ use App\Http\Controllers\KecController;
 use App\Http\Controllers\KelController;
 use App\Http\Controllers\KodeposController;
 use App\Http\Controllers\NavbarController;
+use App\Http\Controllers\DeskripsiController;
 use Illuminate\Support\Facades\DB;
 
 /*
@@ -239,3 +241,15 @@ Route::post('/tambahNavbar', [NavbarController::class, 'tambahNavbar']);
 Route::get('/getNavbar', [NavbarController::class, 'getNavbar']); 
 Route::put('/updateNavbar/{Kode}', [NavbarController::class, 'updateNavbar']); 
 Route::delete('/deleteNavbar/{Kode}', [NavbarController::class, 'deleteNavbar']); 
+
+//gambar
+Route::post('/tambahImage', [ImageController::class, 'tambahImage']);
+Route::get('/getImage', [ImageController::class, 'getImage']); 
+Route::put('/updateImage/{Kode}', [ImageController::class, 'updateImage']); 
+Route::delete('/deleteImage/{Kode}', [ImageController::class, 'deleteImage']); 
+
+//deskripsi
+Route::post('/tambahDeskripsi', [DeskripsiController::class, 'tambahDeskripsi']);
+Route::get('/getDeskripsi', [DeskripsiController::class, 'getDeskripsi']); 
+Route::put('/updateDeskripsi/{Kode}', [DeskripsiController::class, 'updateDeskripsi']); 
+Route::delete('/deleteDeskripsi/{Kode}', [DeskripsiController::class, 'deleteDeskripsi']); 

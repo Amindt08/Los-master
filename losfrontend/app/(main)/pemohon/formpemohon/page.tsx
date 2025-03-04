@@ -437,7 +437,7 @@ const FormPemohon = () => {
         try {
             setFormData(prevData => ({
                 ...prevData,
-                foto_ktp: selectedImage
+                pictures: selectedImage
             }));
         } catch (error) {
             console.error('Error uploading image:', error);

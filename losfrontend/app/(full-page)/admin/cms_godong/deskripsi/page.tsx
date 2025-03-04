@@ -5,8 +5,8 @@ import { API_ENDPOINTS } from '@/app/api/losbackend/api';
 import DataTableWithCRUD from '@/app/(full-page)/admin/component/datatable/page';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-const TambahNavbar = () => {
-    const [Navbar, setNavbar] = useState([]);
+const TambahDeskripsi = () => {
+    const [Deskripsi, setDeskripsi] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const toast = useRef<Toast>(null);
 
@@ -17,8 +17,8 @@ const TambahNavbar = () => {
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            const navbarResponse = await axios.get(API_ENDPOINTS.GETNAVBAR);
-            setNavbar(navbarResponse.data);
+            const deskripsiResponse = await axios.get(API_ENDPOINTS.GETDESKRIPSI);
+            setDeskripsi(deskripsiResponse.data);
         } catch (error) {
             console.error("Error fetching data:", error);
             toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal mengambil data', life: 3000 });
@@ -27,10 +27,10 @@ const TambahNavbar = () => {
         }
     };
 
-    const handleAdd = async (label: string) => {
+    const handleAdd = async (Keterangan: string) => {
         try {
-            await axios.post(API_ENDPOINTS.TAMBAHNAVBAR, { label });
-            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Navbar berhasil ditambahkan', life: 3000 });
+            await axios.post(API_ENDPOINTS.TAMBAHDESKRIPSI, { Keterangan });
+            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Deskripsi berhasil ditambahkan', life: 3000 });
             fetchData();
         } catch (error) {
             console.error('Error adding data:', error);
@@ -38,10 +38,10 @@ const TambahNavbar = () => {
         }
     };
 
-    const handleUpdate = async (Kode: string, label: string) => {
+    const handleUpdate = async (Kode: string, Keterangan: string) => {
         try {
-            await axios.put(API_ENDPOINTS.UPDATENAVBAR(Kode), { label });
-            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Navbar berhasil diupdate', life: 3000 });
+            await axios.put(API_ENDPOINTS.UPDATEDESKRIPSI(Kode), { Keterangan });
+            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Deskripsi berhasil diupdate', life: 3000 });
             fetchData();
         } catch (error) {
             console.error('Error updating data:', error);
@@ -51,8 +51,8 @@ const TambahNavbar = () => {
 
     const handleDelete = async (Kode: string) => {
         try {
-            await axios.delete(API_ENDPOINTS.DELETENAVBAR(Kode));
-            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Navbar berhasil dihapus', life: 3000 });
+            await axios.delete(API_ENDPOINTS.DELETEDESKRIPSI(Kode));
+            toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Deskripsi berhasil dihapus', life: 3000 });
             fetchData();
         } catch (error) {
             console.error('Error deleting data:', error);
@@ -69,22 +69,22 @@ const TambahNavbar = () => {
                 </div>
             ) : (
                 <DataTableWithCRUD
-                    data={Navbar}
+                    data={Deskripsi}
                     loading={isLoading}
                     singleInput={true} // set false jika btuh 2 input
                     imageInput={true}
                     columns={[
-                        { field: 'label', header: 'Navbar' }
+                        { field: 'Keterangan', header: 'Deskripsi' }
                     ]}
                     onAdd={handleAdd}
                     onUpdate={handleUpdate}
                     onDelete={handleDelete}
-                    nameField="label"
-                    inputLabel="Navbar"
+                    nameField="Keterangan"
+                    inputLabel="Deskripsi"
                 />
             )}
         </>
     );
 };
 
-export default TambahNavbar;
+export default TambahDeskripsi;

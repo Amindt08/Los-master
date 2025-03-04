@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Navbar extends Model
+class Deskripsi extends Model
 {
     use HasFactory;
-    protected $table = 'menu_navbar';
+    protected $table = 'deskripsi';
     public $timestamps = false;
     protected $fillable = [
         'id',
         'Kode',
-        'label',
+        'Keterangan',
     ];
 }
