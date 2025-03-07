@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
@@ -7,6 +7,8 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { FileUpload } from 'primereact/fileupload';
 import axios from 'axios';
+import { Toast } from 'primereact/toast';
+
 
 const DataTableImage = ({
     data,
@@ -18,9 +20,8 @@ const DataTableImage = ({
     singleInput = false,
     imageInput = false,
     idField = 'Kode',
-    nameField = 'Keterangan',
+    nameField = 'image',
     nameField2 = 'provinsi_id',
-    nameField3 = 'Image',
     addButtonLabel = 'Tambah',
     editButtonLabel = 'Perbarui',
     deleteButtonLabel = 'Hapus',
@@ -28,14 +29,12 @@ const DataTableImage = ({
     editDialogHeader = 'Edit Data',
     deleteDialogHeader = 'Hapus Data',
     inputLabel = 'Data',
-    inputLabel2 = 'Data',
-    inputLabel3 = 'Data'
 }: any) => {
     const [selectedRow, setSelectedRow] = useState<any>(null);
     const [visibleAdd, setVisibleAdd] = useState(false);
     const [visibleEdit, setVisibleEdit] = useState(false);
     const [visibleDelete, setVisibleDelete] = useState(false);
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState<string | File>('');
     const [inputValue2, setInputValue2] = useState<any>(null);
     const [editValue, setEditValue] = useState('');
     const [editValue2, setEditValue2] = useState<any>(null);
@@ -71,43 +70,54 @@ const DataTableImage = ({
     const [file, setFile] = useState<File | null>(null);
     const [uploadStatus, setUploadStatus] = useState<UploadStatus>('idle');
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    
+    const toast = useRef<Toast>(null);
+
 
     const handleImageChange = (event: any) => {
-            const selectedImage = event.files?.[0];
-            if (selectedImage) {
-                setFile(selectedImage); // Simpan file ke state
-    
-                // Convert file ke base64 untuk pratinjau
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    setSelectedImage(reader.result as string);
-                };
-                reader.readAsDataURL(selectedImage);
-            }
-        };
+        const selectedImage = event.files?.[0];
+        if (selectedImage) {
+            setFile(selectedImage); // Simpan file ke state
+
+            // Convert file ke base64 untuk pratinjau
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setSelectedImage(reader.result as string);
+            };
+            reader.readAsDataURL(selectedImage);
+        }
+    };
+
+
+    // const handleImageUpload = async () => {
+    //     if (!file) return;
+    //     console.log('uploading', file);
+    //     const formData = new FormData();
+    //     formData.append('image', file);
+    //     try {
+    //         await axios.post('http://localhost:8000/api/tambahImage', formData, {
+    //             headers: {
+    //                 'Content-Type': 'multipart/form-data'
+    //             }
+    //         });
+    //         console.log('success');
+    //     } catch (error) {
+    //         console.error('Error uploading', error);
+    //         console.log('error');
+    //     }
+    // }
 
     const handleImageUpload = async () => {
         if (!file) return;
-
-        setUploadStatus('uploading');
-
-        const formData = new FormData();
-        formData.append('image', file);
-
-        try{
-            await axios.post('http://localhost:8000/api/image', formData,{
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-
-            setUploadStatus('success');
-        }catch (error) {
+        console.log('uploading');
+        setInputValue(file);
+        try {
+            console.log('success');
+        } catch (error) {
             console.error('Error uploading', error);
-            setUploadStatus('error');
+            console.log('error');
         }
     }
+
     return (
         <div className='mb-5'>
             <div className='mb-2 flex justify-content-end'>
@@ -154,6 +164,8 @@ const DataTableImage = ({
                                 <label htmlFor="fileUpload" className='font-bold'>Upload Media</label>
                                 <FileUpload
                                     name="media"
+                                    url={'http://localhost/api/tambahImage'}
+                                    multiple
                                     accept="image/*"
                                     maxFileSize={1000000}
                                     onSelect={(e) => {
@@ -170,11 +182,7 @@ const DataTableImage = ({
                                             reader.readAsDataURL(file);
                                         }
                                     }}
-                                    emptyTemplate={
-                                        formData.pictures ?
-                                            <img src={formData.pictures} alt="Preview" style={{ width: '100%', maxHeight: '200px', objectFit: 'contain' }} /> :
-                                            <p className="m-0">Seret dan lepas file di sini atau klik untuk memilih.</p>
-                                    }
+                                    emptyTemplate={<p className="m-0">Seret dan lepas file di sini atau klik untuk memilih.</p>}
                                     chooseLabel="Pilih File"
                                     cancelLabel="Batal"
                                     customUpload
@@ -192,39 +200,37 @@ const DataTableImage = ({
             <Dialog header={`${editDialogHeader}: ${selectedRow?.[nameField]}`} visible={visibleEdit} style={{ width: '90vw', maxWidth: '500px' }} onHide={() => setVisibleEdit(false)}>
                 <div className="p-fluid">
                     {!imageInput && (
-                            <div className="field">
-                                <label htmlFor="fileUpload" className='font-bold'>Upload Media</label>
-                                <FileUpload
-                                    name="media"
-                                    accept="image/*"
-                                    maxFileSize={1000000}
-                                    onSelect={(e) => {
-                                        handleImageChange(e);
-                                        const file = e.files[0];
-                                        if (file) {
-                                            const reader = new FileReader();
-                                            reader.onloadend = () => {
-                                                setFormData(prev => ({
-                                                    ...prev,
-                                                    image: reader.result
-                                                }));
-                                            };
-                                            reader.readAsDataURL(file);
-                                        }
-                                    }}
-                                    emptyTemplate={
-                                        formData.pictures ?
-                                            <img src={formData.pictures} alt="Preview" style={{ width: '100%', maxHeight: '200px', objectFit: 'contain' }} /> :
-                                            <p className="m-0">Seret dan lepas file di sini atau klik untuk memilih.</p>
+                        <div className="field">
+                            <label htmlFor="fileUpload" className='font-bold'>Upload Media</label>
+                            <FileUpload
+                                name="media"
+                                url={'http://localhost/api/tambahImage'}
+                                multiple
+                                accept="image/*"
+                                maxFileSize={1000000}
+                                onSelect={(e) => {
+                                    handleImageChange(e);
+                                    const file = e.files[0];
+                                    if (file) {
+                                        const reader = new FileReader();
+                                        reader.onloadend = () => {
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                image: reader.result
+                                            }));
+                                        };
+                                        reader.readAsDataURL(file);
                                     }
-                                    chooseLabel="Pilih File"
-                                    cancelLabel="Batal"
-                                    customUpload
-                                    className="w-full"
-                                    uploadHandler={handleImageUpload}
-                                />
-                            </div>
-                        )}
+                                }}
+                                emptyTemplate={<p className="m-0">Seret dan lepas file di sini atau klik untuk memilih.</p>}
+                                chooseLabel="Pilih File"
+                                cancelLabel="Batal"
+                                customUpload
+                                className="w-full"
+                                uploadHandler={handleImageUpload}
+                            />
+                        </div>
+                    )}
                     <div className='flex flex-column sm:flex-row justify-content-end mt-3'>
                         <Button label="Batal" icon="pi pi-times" onClick={() => setVisibleEdit(false)} className="p-button-text w-full sm:w-3 mb-2 sm:mb-0 sm:mr-2 " />
                         <Button label={editButtonLabel} icon="pi pi-check" onClick={handleUpdate} autoFocus className="w-full sm:w-3" />

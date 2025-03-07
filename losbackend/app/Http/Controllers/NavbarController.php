@@ -13,7 +13,7 @@ class NavbarController extends Controller
     {
         $navbar = new Navbar;
         $kodeTerakhir = Navbar::max('Kode');
-        $nomorBaru = $kodeTerakhir ? $kodeTerakhir +1 : 1;
+        $nomorBaru = $kodeTerakhir ? $kodeTerakhir + 1 : 1;
         $navbar->Kode = $nomorBaru;
         $navbar->label = $request->input('label');
         $navbar->save();
@@ -25,7 +25,17 @@ class NavbarController extends Controller
     {
         $navbar = Navbar::all();
         return response()->json($navbar);
-    }   
+    }
+
+    public function getNavbarById($id)
+    {
+        $navbar = Navbar::where('Kode', $id)->first();
+
+        if (!$navbar) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+        return response()->json($navbar);
+    }
 
     public function updateNavbar(Request $request, string $id)
     {

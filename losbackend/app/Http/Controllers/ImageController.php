@@ -5,76 +5,83 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class ImageController extends Controller
 {
     public function tambahImage(Request $request)
-    {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+{
+    $request->validate([
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        $image = new image;
-        $kodeTerakhir = image::max('Kode');
-        $nomorBaru = $kodeTerakhir ? $kodeTerakhir + 1 : 1;
-        $image->Kode = $nomorBaru;
+    return DB::transaction(function () use ($request) {
+        $data = new Image;
 
-        $image = image::create($request->all());
+        // Lock tabel sebelum mengambil kode terakhir
+        DB::table('image')->lockForUpdate()->get();
 
-        if($request->hasFile('image')){
-            $request->file('image')->move('images/', $request->file('image')->getClientOriginalName());
-            $image->image = $request->file('image')->getClientOriginalName();
-            $image->save();
+        $kodeTerakhir = Image::max('Kode');
+        $nomorBaru = ($kodeTerakhir ?? 0) + 1;
 
-            return response()->json(['message' => 'Gambar berhasil diunggah', 'image' => $image]);
+        $data->Kode = $nomorBaru;
+
+        if ($request->hasFile('image')) {
+            $fileName = $request->file('image')->getClientOriginalName();
+            $request->file('image')->move('images/', $fileName);
+            $data->image = $fileName;
+            $data->save();
         }
 
-        return response()->json(['message' => 'Gagal mengunggah gambar'], 400);
-    }
+        return response()->json(['message' => 'Gambar berhasil diunggah', 'image' => $data]);
+    });
+}
+
 
     public function getImage()
     {
-        $images = Image::all();
-        return response()->json($images);
+        $image = Image::all();
+        return response()->json($image);
     }
 
     public function updateImage(Request $request, $id)
     {
-        $images = Image::where('Kode', $id)->firstOrFail();
-        
+        $image = Image::where('Kode', $id)->firstOrFail();
+
         if ($request->hasFile('Image')) {
             $request->validate([
                 'Image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             // Hapus gambar lama jika ada
-            if ($images->Image && Storage::disk('public')->exists($images->Image)) {
-                Storage::disk('public')->delete($images->Image);
+            if ($image->image && Storage::disk('public')->exists($image->image)) {
+                Storage::disk('public')->delete($image->image);
             }
 
             $file = $request->file('Image');
             $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('Image', $filename, 'public');
-            $images->Image = $path;
+            $image->image = $path;
         }
 
-        $images->save();
-        return response()->json(['message' => 'Gambar berhasil diperbarui', 'image' => $images]);
+        $image->save();
+        return response()->json(['message' => 'Gambar berhasil diperbarui', 'image' => $image]);
     }
 
     public function deleteImage($id)
     {
-        $images = Image::where('Kode', $id)->first();
-        if (!$images) {
+        $image = Image::where('Kode', $id)->first();
+        if (!$image) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }
 
-        if ($images->Image && Storage::disk('public')->exists($images->Image)) {
-            Storage::disk('public')->delete($images->Image);
+        if ($image->Image && Storage::disk('public')->exists($image->Image)) {
+            Storage::disk('public')->delete($image->Image);
         }
 
-        $images->delete();
+        $image->delete();
         return response()->json(['message' => 'Data berhasil dihapus']);
     }
 }

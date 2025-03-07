@@ -27,6 +27,16 @@ class DeskripsiController extends Controller
         return response()->json($deskripsi);
     }
 
+    public function getDeskripsiById($id)
+{
+    $deskripsi = Deskripsi::where('Kode', $id)->first();
+
+    if (!$deskripsi) {
+        return response()->json(['message' => 'Data tidak ditemukan'], 404);
+    }
+    return response()->json($deskripsi);
+}
+
     public function updateDeskripsi(Request $request, string $id)
     {
         $deskripsi = Deskripsi::where('Kode', $id)->firstOrFail();

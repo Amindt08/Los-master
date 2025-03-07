@@ -23,6 +23,7 @@ use App\Http\Controllers\KelController;
 use App\Http\Controllers\KodeposController;
 use App\Http\Controllers\NavbarController;
 use App\Http\Controllers\DeskripsiController;
+use App\Http\Controllers\TitleController;
 use Illuminate\Support\Facades\DB;
 
 /*
@@ -241,6 +242,7 @@ Route::post('/tambahNavbar', [NavbarController::class, 'tambahNavbar']);
 Route::get('/getNavbar', [NavbarController::class, 'getNavbar']); 
 Route::put('/updateNavbar/{Kode}', [NavbarController::class, 'updateNavbar']); 
 Route::delete('/deleteNavbar/{Kode}', [NavbarController::class, 'deleteNavbar']); 
+Route::get('/getNavbar/{id}', [NavbarController::class, 'getNavbarById']);
 
 //gambar
 Route::post('/tambahImage', [ImageController::class, 'tambahImage']);
@@ -253,3 +255,11 @@ Route::post('/tambahDeskripsi', [DeskripsiController::class, 'tambahDeskripsi'])
 Route::get('/getDeskripsi', [DeskripsiController::class, 'getDeskripsi']); 
 Route::put('/updateDeskripsi/{Kode}', [DeskripsiController::class, 'updateDeskripsi']); 
 Route::delete('/deleteDeskripsi/{Kode}', [DeskripsiController::class, 'deleteDeskripsi']); 
+Route::get('/getDeskripsi/{id}', [DeskripsiController::class, 'getDeskripsiById']);
+
+//judul
+Route::post('/tambahTitle', [TitleController::class, 'tambahTitle']);
+Route::get('/getTitle', [TitleController::class, 'getTitle']); 
+Route::put('/updateTitle/{Kode}', [TitleController::class, 'updateTitle']); 
+Route::delete('/deleteTitle/{Kode}', [TitleController::class, 'deleteTitle']); 
+Route::get('/getTitle/{id}', [TitleController::class, 'getTitleById']);

@@ -22,6 +22,7 @@ const TambahGambar = () => {
         setIsLoading(true);
         try {
             const imageResponse = await axios.get(API_ENDPOINTS.GETIMAGE);
+
             setImage(imageResponse.data);
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -31,27 +32,56 @@ const TambahGambar = () => {
         }
     };
 
-    const handleAdd = async (Image: File) => {
+    const handleAdd = async (image: File) => {
+        if (!image) {
+            toast.current?.show({ severity: 'warn', summary: 'Warning', detail: 'Silakan pilih gambar terlebih dahulu', life: 3000 });
+            return;   
+        }
+    
+        const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        if (!validTypes.includes(image.type)) {
+            toast.current?.show({ severity: 'warn', summary: 'Warning', detail: 'Format gambar tidak didukung (harus jpg/png)', life: 3000 });
+            return;
+        }
+    
+        if (image.size > 2 * 1024 * 1024) { // Batas 2MB
+            toast.current?.show({ severity: 'warn', summary: 'Warning', detail: 'Ukuran gambar terlalu besar (maks 2MB)', life: 3000 });
+            return;
+        }
+    
         try {
             const formData = new FormData();
-            formData.append("Image", Image);
-
+            formData.append("image", image);
+    
             await axios.post(API_ENDPOINTS.TAMBAHIMAGE, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
             });
-
+    
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Gambar berhasil ditambahkan', life: 3000 });
             fetchData();
         } catch (error) {
             console.error('Error adding data:', error);
-            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal menambahkan gambar', life: 3000 });
+            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal menambahkan data', life: 3000 });
         }
     };
+    
+    // const handleAdd = async (image: File) => {
+    //     try {
+    //         await axios.post(API_ENDPOINTS.TAMBAHIMAGE, { image });
+    //         toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Gambar berhasil ditambahkan', life: 3000 });
+    //         fetchData();
+    //     } catch (error) {
+    //         console.error('Error adding data:', error);
+    //         toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal menambahkan data', life: 3000 });
+    //     }
+    // };
 
-    const handleUpdate = async (Kode: string, Image: File) => {
+    const handleUpdate = async (Kode: string, image: File) => {
         try {
             const formData = new FormData();
-            formData.append("Image", Image);
+            formData.append("image", image);
 
             await axios.post(API_ENDPOINTS.UPDATEIMAGE(Kode), formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
@@ -89,13 +119,13 @@ const TambahGambar = () => {
                     loading={isLoading}
                     singleInput={true} // set false jika btuh 2 input
                     columns={[
-                        { field: 'Image', header: 'Image', }
+                        { field: 'image', header: 'Image', }
                     ]}
                     onAdd={handleAdd}
                     onUpdate={handleUpdate}
                     onDelete={handleDelete}
-                    nameField="Image"
-                    inputLabel="Image"
+                    nameField="image"
+                    inputLabel="image"
                 />
             )}
         </>

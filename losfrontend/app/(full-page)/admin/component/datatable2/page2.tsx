@@ -6,8 +6,9 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { FileUpload } from 'primereact/fileupload';
+import axios from 'axios';
 
-const DataTableWithCRUD = ({
+const DataTableImage = ({
     data,
     data2,
     onAdd,
@@ -28,17 +29,20 @@ const DataTableWithCRUD = ({
     deleteDialogHeader = 'Hapus Data',
     inputLabel = 'Data',
     inputLabel2 = 'Data',
+    inputLabel3 = 'Data'
 }: any) => {
     const [selectedRow, setSelectedRow] = useState<any>(null);
     const [visibleAdd, setVisibleAdd] = useState(false);
     const [visibleEdit, setVisibleEdit] = useState(false);
     const [visibleDelete, setVisibleDelete] = useState(false);
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState<any>(null);
     const [inputValue2, setInputValue2] = useState<any>(null);
     const [editValue, setEditValue] = useState('');
     const [editValue2, setEditValue2] = useState<any>(null);
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [isUploading, setIsUploading] = useState(false);
+    const [formData, setFormData] = useState({
+        pictures: ''
+    });
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -63,26 +67,39 @@ const DataTableWithCRUD = ({
         setVisibleEdit(false);
     };
 
-    // const handleUpload = async () => {
-    //     if (!selectedImage) {
-    //         return;
-    //     }
+    type UploadStatus = 'idle' | 'uploading' | 'success' | 'error';
+    const [file, setFile] = useState<File | null>(null);
+    const [uploadStatus, setUploadStatus] = useState<UploadStatus>('idle');
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    
 
-    //     setIsUploading(true);
+    const handleImageChange = (event: any) => {
+            const selectedImage = event.files?.[0];
+            if (selectedImage) {
+                setFile(selectedImage); // Simpan file ke state
+    
+                // Convert file ke base64 untuk pratinjau
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setSelectedImage(reader.result as string);
+                };
+                reader.readAsDataURL(selectedImage);
+            }
+        };
 
-    //     try {
-    //         setFormData(prevData => ({
-    //             ...prevData,
-    //             foto_ktp: selectedImage
-    //         }));
-    //     } catch (error) {
-    //         console.error('Error uploading image:', error);
-    //         // toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal mengunggah foto KTP', life: 3000 });
-    //     } finally {
-    //         setIsUploading(false);
-    //     }
-    // };
+    const handleImageUpload = async () => {
+        if (!file) return;
 
+        setUploadStatus('uploading');
+      setInputValue(file);
+        try{
+        
+            setUploadStatus('success');
+        }catch (error) {
+            console.error('Error uploading', error);
+            setUploadStatus('error');   
+        }
+    }
     return (
         <div className='mb-5'>
             <div className='mb-2 flex justify-content-end'>
@@ -110,11 +127,11 @@ const DataTableWithCRUD = ({
                     <Button icon="pi pi-trash" style={{ color: '#000000', transition: 'transform 0.3s ease-in-out' }} className='bg-red-200 border-transparent hover:scale-110' onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'} onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'} onClick={() => {
                         setSelectedRow(rowData);
                         setVisibleDelete(true);
-                        console.log(rowData);
+                        
                     }} />
                 )} />
             </DataTable>
-            <Dialog header={`${deleteDialogHeader} ${selectedRow?.[nameField]}`} visible={visibleDelete} style={{ width: '90vw', maxWidth: '500px' }} onHide={() => setVisibleDelete(false)}>
+            <Dialog header={${deleteDialogHeader} ${selectedRow?.[nameField]}} visible={visibleDelete} style={{ width: '90vw', maxWidth: '500px' }} onHide={() => setVisibleDelete(false)}>
                 <label htmlFor="">Apakah anda yakin ingin menghapus data ini?</label>
                 <div className='flex flex-column sm:flex-row justify-content-end mt-3'>
                     <Button label="No" icon="pi pi-times" onClick={() => setVisibleDelete(false)} className="p-button-text mb-2 sm:mb-0 sm:mr-2" />
@@ -124,28 +141,10 @@ const DataTableWithCRUD = ({
             <Dialog header={addDialogHeader} visible={visibleAdd} style={{ width: '90vw', maxWidth: '500px' }} onHide={() => setVisibleAdd(false)}>
                 <div className="p-fluid mb-5">
                     <form onSubmit={handleSubmit}>
-                        {
-                            //dropdown data parent
-                        }
-                        {!singleInput && (
-                            <div className="field">
-                                <label htmlFor="dropdown" className='font-bold'>{inputLabel2}</label>
-                                <Dropdown
-                                    id="dropdown"
-                                    value={inputValue2}
-                                    options={data2}
-                                    onChange={(e) => setInputValue2(e.value)}
-                                    optionLabel='Keterangan'
-                                    placeholder="Pilih Opsi"
-                                    className="w-full"
-                                />
-                            </div>
-                        )}
-                        {/* {!imageInput && (
+                        {!imageInput && (
                             <div className="field">
                                 <label htmlFor="fileUpload" className='font-bold'>Upload Media</label>
                                 <FileUpload
-                                    id="fileUpload"
                                     name="media"
                                     accept="image/*"
                                     maxFileSize={1000000}
@@ -157,69 +156,67 @@ const DataTableWithCRUD = ({
                                             reader.onloadend = () => {
                                                 setFormData(prev => ({
                                                     ...prev,
-                                                    foto_ktp: reader.result
+                                                    image: reader.result
                                                 }));
                                             };
                                             reader.readAsDataURL(file);
                                         }
                                     }}
                                     emptyTemplate={
-                                        formData.pictures ? 
-                                        <img src={formData.pictures} alt="Preview" style={{width: '100%', maxHeight: '200px', objectFit: 'contain'}}/> :
-                                        <p className="m-0">Seret dan lepas file KTP di sini atau klik untuk memilih.</p>
+                                        formData.pictures ?
+                                            <img src={formData.pictures} alt="Preview" style={{ width: '100%', maxHeight: '200px', objectFit: 'contain' }} /> :
+                                            <p className="m-0">Seret dan lepas file di sini atau klik untuk memilih.</p>
                                     }
-                                    customUpload
-                                    uploadHandler={handleFileUpload}
                                     chooseLabel="Pilih File"
-                                    cancelLabel="Batal" 
+                                    cancelLabel="Batal"
+                                    customUpload
                                     className="w-full"
+                                    uploadHandler={handleImageUpload}
                                 />
                             </div>
-                        )} */}
-                        <div className="field">
-                            <label htmlFor="inputValue" className='font-bold'>{inputLabel}</label>
-                            <InputText
-                                id="inputValue"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                                required className="w-full"
-                            />
-                        </div>
+                        )}
                         <div className='flex flex-column sm:flex-row justify-content-end mt-3'>
                             <Button className='w-full sm:w-4' type="submit" label="Simpan" icon="pi pi-check" />
                         </div>
                     </form>
                 </div>
             </Dialog>
-            <Dialog header={`${editDialogHeader}: ${selectedRow?.[nameField]}`} visible={visibleEdit} style={{ width: '90vw', maxWidth: '500px' }} onHide={() => setVisibleEdit(false)}>
+            <Dialog header={${editDialogHeader}: ${selectedRow?.[nameField]}} visible={visibleEdit} style={{ width: '90vw', maxWidth: '500px' }} onHide={() => setVisibleEdit(false)}>
                 <div className="p-fluid">
-                    {
-                        //dropdown edit data parent
-                    }
-                    {!singleInput && (
-                        <div className="field " >
-                            <label htmlFor="dropdown" className='font-bold'>{inputLabel2}</label>
-                            <Dropdown
-                                id="dropdown"
-                                value={editValue2}
-                                options={data2}
-                                onChange={(e) => setEditValue2(e.value)}
-                                optionLabel='Keterangan'
-                                placeholder="Pilih Opsi"
-                                className="w-full"
-                            />
-                        </div>
-                    )}
-                    <div className="field">
-                        <label htmlFor="editValue" className='font-bold'>{inputLabel}</label>
-                        <InputText
-                            id="editValue"
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            required className="w-full"
-                        />
-                    </div>
-
+                    {!imageInput && (
+                            <div className="field">
+                                <label htmlFor="fileUpload" className='font-bold'>Upload Media</label>
+                                <FileUpload
+                                    name="media"
+                                    accept="image/*"
+                                    maxFileSize={1000000}
+                                    onSelect={(e) => {
+                                        handleImageChange(e);
+                                        const file = e.files[0];
+                                        if (file) {
+                                            const reader = new FileReader();
+                                            reader.onloadend = () => {
+                                                setFormData(prev => ({
+                                                    ...prev,
+                                                    image: reader.result
+                                                }));
+                                            };
+                                            reader.readAsDataURL(file);
+                                        }
+                                    }}
+                                    emptyTemplate={
+                                        formData.pictures ?
+                                            <img src={formData.pictures} alt="Preview" style={{ width: '100%', maxHeight: '200px', objectFit: 'contain' }} /> :
+                                            <p className="m-0">Seret dan lepas file di sini atau klik untuk memilih.</p>
+                                    }
+                                    chooseLabel="Pilih File"
+                                    cancelLabel="Batal"
+                                    customUpload
+                                    className="w-full"
+                                    uploadHandler={handleImageUpload}
+                                />
+                            </div>
+                        )}
                     <div className='flex flex-column sm:flex-row justify-content-end mt-3'>
                         <Button label="Batal" icon="pi pi-times" onClick={() => setVisibleEdit(false)} className="p-button-text w-full sm:w-3 mb-2 sm:mb-0 sm:mr-2 " />
                         <Button label={editButtonLabel} icon="pi pi-check" onClick={handleUpdate} autoFocus className="w-full sm:w-3" />
@@ -230,4 +227,4 @@ const DataTableWithCRUD = ({
     );
 };
 
-export default DataTableWithCRUD;
+export default DataTableImage;

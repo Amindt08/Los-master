@@ -194,4 +194,10 @@ export const API_ENDPOINTS = {
   TAMBAHDESKRIPSI: `${api_url}/tambahDeskripsi`,
   UPDATEDESKRIPSI: (Kode: string) => `${api_url}/updateDeskripsi/${Kode}`,
   DELETEDESKRIPSI: (Kode: string) => `${api_url}/deleteDeskripsi/${Kode}`,
+
+  //Judul
+  GETTITLE: `${api_url}/getTitle`,
+  TAMBAHTITLE: `${api_url}/tambahTitle`,
+  UPDATETITLE: (Kode: string) => `${api_url}/updateTitle/${Kode}`,
+  DELETETITLE: (Kode: string) => `${api_url}/deleteTitle/${Kode}`,
 };

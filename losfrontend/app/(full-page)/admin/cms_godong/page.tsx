@@ -5,6 +5,7 @@ import { Toast } from 'primereact/toast';
 import TambahNavbar from './navbar/page';
 import TambahGambar from './image/page';
 import TambahDeskripsi from './deskripsi/page';
+import TambahTitle from './title/page';
 
 const TambahanAnalisaKredit = () => {
     const toast = useRef<Toast>(null);
@@ -22,6 +23,9 @@ const TambahanAnalisaKredit = () => {
                 </TabPanel>
                 <TabPanel header="Tambah Deskripsi">
                     <TambahDeskripsi />
+                </TabPanel>
+                <TabPanel header="Tambah Judul">
+                    <TambahTitle />
                 </TabPanel>
             </TabView>
         </div>
