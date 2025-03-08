@@ -5,20 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Navbar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class NavbarController extends Controller
 {
 
     public function tambahNavbar(Request $request)
     {
-        $navbar = new Navbar;
-        $kodeTerakhir = Navbar::max('Kode');
-        $nomorBaru = $kodeTerakhir ? $kodeTerakhir + 1 : 1;
-        $navbar->Kode = $nomorBaru;
-        $navbar->label = $request->input('label');
-        $navbar->save();
+        return DB::transaction(function () use ($request) {
+            $navbar = new Navbar;
+            
+            DB::table('deskripsi')->lockForUpdate()->get();
 
-        return response()->json($navbar);
+            $kodeTerakhir = Navbar::max('Kode');
+            $nomorBaru = ($kodeTerakhir ?? 0) + 1;
+
+            $navbar->Kode = $nomorBaru;
+            
+            $navbar->label = $request->input('label');
+            $navbar->save();
+
+            return response()->json($navbar);
+        });
     }
 
     public function getNavbar()

@@ -12,76 +12,85 @@ use Illuminate\Support\Facades\DB;
 class ImageController extends Controller
 {
     public function tambahImage(Request $request)
-{
-    $request->validate([
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    return DB::transaction(function () use ($request) {
-        $data = new Image;
+        return DB::transaction(function () use ($request) {
+            $data = new Image;
 
-        // Lock tabel sebelum mengambil kode terakhir
-        DB::table('image')->lockForUpdate()->get();
+            DB::table('image')->lockForUpdate()->get();
 
-        $kodeTerakhir = Image::max('Kode');
-        $nomorBaru = ($kodeTerakhir ?? 0) + 1;
+            $kodeTerakhir = Image::max('Kode');
+            $nomorBaru = ($kodeTerakhir ?? 0) + 1;
 
-        $data->Kode = $nomorBaru;
+            $data->Kode = $nomorBaru;
 
-        if ($request->hasFile('image')) {
-            $fileName = $request->file('image')->getClientOriginalName();
-            $request->file('image')->move('images/', $fileName);
-            $data->image = $fileName;
-            $data->save();
+            if ($request->hasFile('image')) {
+                $fileName = $request->file('image')->getClientOriginalName();
+                $request->file('image')->move('images/', $fileName);
+                $data->image = $fileName;
+                $data->save();
+            }
+
+            return response()->json(['message' => 'Gambar berhasil diunggah', 'image' => $data]);
+        });
+    }
+
+    public function getImageById($id)
+    {
+        $data = Image::where('Kode', $id)->first();
+
+        if (!$data) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }
-
-        return response()->json(['message' => 'Gambar berhasil diunggah', 'image' => $data]);
-    });
-}
-
+        return response()->json($data);
+    }
 
     public function getImage()
     {
-        $image = Image::all();
-        return response()->json($image);
+        $data = Image::all();
+        return response()->json($data);
     }
 
     public function updateImage(Request $request, $id)
     {
-        $image = Image::where('Kode', $id)->firstOrFail();
+        $data = Image::where('Kode', $id)->firstOrFail();
 
-        if ($request->hasFile('Image')) {
+        if ($request->hasFile('image')) {
             $request->validate([
-                'Image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+                'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             // Hapus gambar lama jika ada
-            if ($image->image && Storage::disk('public')->exists($image->image)) {
-                Storage::disk('public')->delete($image->image);
+            $oldImagePath = 'images/' . $data->image; // Sesuaikan dengan lokasi penyimpanan yang benar
+            if ($data->image && file_exists(public_path($oldImagePath))) {
+                unlink(public_path($oldImagePath)); // Hapus gambar lama
             }
 
-            $file = $request->file('Image');
+            $file = $request->file('image');
             $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('Image', $filename, 'public');
-            $image->image = $path;
+            $file->move(public_path('images'), $filename);
+            $data->image = 'images/' . $filename;
         }
 
-        $image->save();
-        return response()->json(['message' => 'Gambar berhasil diperbarui', 'image' => $image]);
+        $data->save();
+        return response()->json(['message' => 'Gambar berhasil diperbarui', 'image' => $data]);
     }
 
     public function deleteImage($id)
     {
-        $image = Image::where('Kode', $id)->first();
-        if (!$image) {
+        $data = Image::where('Kode', $id)->first();
+        if (!$data) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }
 
-        if ($image->Image && Storage::disk('public')->exists($image->Image)) {
-            Storage::disk('public')->delete($image->Image);
+        if ($data->Image && Storage::disk('public')->exists($data->Image)) {
+            Storage::disk('public')->delete($data->Image);
         }
 
-        $image->delete();
+        $data->delete();
         return response()->json(['message' => 'Data berhasil dihapus']);
     }
 }

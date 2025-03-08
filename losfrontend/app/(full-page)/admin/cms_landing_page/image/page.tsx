@@ -83,7 +83,7 @@ const TambahGambar = () => {
             const formData = new FormData();
             formData.append("image", image);
 
-            await axios.post(API_ENDPOINTS.UPDATEIMAGE(Kode), formData, {
+            await axios.put(API_ENDPOINTS.UPDATEIMAGE(Kode), formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 

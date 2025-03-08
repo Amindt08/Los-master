@@ -5,20 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Deskripsi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class DeskripsiController extends Controller
 {
 
     public function tambahDeskripsi(Request $request)
     {
-        $dekripsi = new Deskripsi;
-        $kodeTerakhir = Deskripsi::max('Kode');
-        $nomorBaru = $kodeTerakhir ? $kodeTerakhir +1 : 1;
-        $dekripsi->Kode = $nomorBaru;
-        $dekripsi->Keterangan = $request->input('Keterangan');
-        $dekripsi->save();
+        return DB::transaction(function () use ($request) {
+            $dekripsi = new Deskripsi;
+            
+            DB::table('deskripsi')->lockForUpdate()->get();
 
-        return response()->json($dekripsi);
+            $kodeTerakhir = Deskripsi::max('Kode');
+            $nomorBaru = ($kodeTerakhir ?? 0) + 1;
+
+            $dekripsi->Kode = $nomorBaru;
+            
+            $dekripsi->Keterangan = $request->input('Keterangan');
+            $dekripsi->save();
+
+            return response()->json($dekripsi);
+        });
     }
 
     public function getDeskripsi()
@@ -28,14 +36,14 @@ class DeskripsiController extends Controller
     }
 
     public function getDeskripsiById($id)
-{
-    $deskripsi = Deskripsi::where('Kode', $id)->first();
+    {
+        $deskripsi = Deskripsi::where('Kode', $id)->first();
 
-    if (!$deskripsi) {
-        return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        if (!$deskripsi) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+        return response()->json($deskripsi);
     }
-    return response()->json($deskripsi);
-}
 
     public function updateDeskripsi(Request $request, string $id)
     {

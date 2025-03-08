@@ -249,6 +249,8 @@ Route::post('/tambahImage', [ImageController::class, 'tambahImage']);
 Route::get('/getImage', [ImageController::class, 'getImage']); 
 Route::put('/updateImage/{Kode}', [ImageController::class, 'updateImage']); 
 Route::delete('/deleteImage/{Kode}', [ImageController::class, 'deleteImage']); 
+Route::get('/getImage/{id}', [ImageController::class, 'getImageById']);
+
 
 //deskripsi
 Route::post('/tambahDeskripsi', [DeskripsiController::class, 'tambahDeskripsi']);
