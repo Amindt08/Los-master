@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Title;
+use App\Models\TitleProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
-class TitleController extends Controller
+class TitleProductController extends Controller
 {
 
-    public function tambahTitle(Request $request)
+    public function tambahTitleProduct(Request $request)
     {
         return DB::transaction(function () use ($request) {
-            $title = new Title;
+            $title = new TitleProduct;
             
-            DB::table('judul')->lockForUpdate()->get();
+            DB::table('deskripsi')->lockForUpdate()->get();
 
-            $kodeTerakhir = Title::max('Kode');
+            $kodeTerakhir = TitleProduct::max('Kode');
             $nomorBaru = ($kodeTerakhir ?? 0) + 1;
 
             $title->Kode = $nomorBaru;
@@ -29,15 +29,15 @@ class TitleController extends Controller
         });
     }
 
-    public function getTitle()
+    public function getTitleProduct()
     {
-        $title = Title::all();
+        $title = TitleProduct::all();
         return response()->json($title);
     }
 
-    public function getTitleById($id)
+    public function getTitleProductById($id)
 {
-    $title = Title::where('Kode', $id)->first();
+    $title = TitleProduct::where('Kode', $id)->first();
 
     if (!$title) {
         return response()->json(['message' => 'Data tidak ditemukan'], 404);
@@ -45,16 +45,16 @@ class TitleController extends Controller
     return response()->json($title);
 }
 
-    public function updateTitle(Request $request, string $id)
+    public function updateTitleProduct(Request $request, string $id)
     {
-        $title = Title::where('Kode', $id)->firstOrFail();
+        $title = TitleProduct::where('Kode', $id)->firstOrFail();
         $title->update($request->all());
         return response()->json($title);
     }
 
-    public function deleteTitle($id)
+    public function deleteTitleProduct($id)
     {
-        $title = Title::where('Kode', $id)->first();
+        $title = TitleProduct::where('Kode', $id)->first();
         if (!$title) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }

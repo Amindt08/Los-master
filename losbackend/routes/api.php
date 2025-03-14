@@ -24,6 +24,19 @@ use App\Http\Controllers\KodeposController;
 use App\Http\Controllers\NavbarController;
 use App\Http\Controllers\DeskripsiController;
 use App\Http\Controllers\TitleController;
+use App\Http\Controllers\TopbarController;
+use App\Http\Controllers\ImageProductController;
+use App\Http\Controllers\TitleProductController;
+use App\Http\Controllers\DeskripsiProductController;
+use App\Http\Controllers\DeskripsiCustomerController;
+use App\Http\Controllers\TitleCustomerController;
+use App\Http\Controllers\ImageCustomerController;
+use App\Http\Controllers\DeskripsiMkLiteController;
+use App\Http\Controllers\TitleMkLiteController;
+use App\Http\Controllers\ImageMkLiteController;
+use App\Http\Controllers\SidebarProductController;
+
+
 use Illuminate\Support\Facades\DB;
 
 /*
@@ -244,6 +257,20 @@ Route::put('/updateNavbar/{Kode}', [NavbarController::class, 'updateNavbar']);
 Route::delete('/deleteNavbar/{Kode}', [NavbarController::class, 'deleteNavbar']); 
 Route::get('/getNavbar/{id}', [NavbarController::class, 'getNavbarById']);
 
+//topbar
+Route::post('/tambahTopbar', [TopbarController::class, 'tambahTopbar']);
+Route::get('/getTopbar', [TopbarController::class, 'getTopbar']); 
+Route::put('/updateTopbar/{Kode}', [TopbarController::class, 'updateTopbar']); 
+Route::delete('/deleteTopbar/{Kode}', [TopbarController::class, 'deleteTopbar']); 
+Route::get('/getTopbar/{id}', [TopbarController::class, 'getTopbarById']);
+
+//sidebar product
+Route::post('/tambahSidebarProduct', [SidebarProductController::class, 'tambahSidebarProduct']);
+Route::get('/getSidebarProduct', [SidebarProductController::class, 'getSidebarProduct']); 
+Route::put('/updateSidebarProduct/{Kode}', [SidebarProductController::class, 'updateSidebarProduct']); 
+Route::delete('/deleteSidebarProduct/{Kode}', [SidebarProductController::class, 'deleteSidebarProduct']); 
+Route::get('/getSidebarProduct/{id}', [SidebarProductController::class, 'getSidebarProductById']);
+
 //gambar
 Route::post('/tambahImage', [ImageController::class, 'tambahImage']);
 Route::get('/getImage', [ImageController::class, 'getImage']); 
@@ -251,6 +278,26 @@ Route::put('/updateImage/{Kode}', [ImageController::class, 'updateImage']);
 Route::delete('/deleteImage/{Kode}', [ImageController::class, 'deleteImage']); 
 Route::get('/getImage/{id}', [ImageController::class, 'getImageById']);
 
+//gambar page product
+Route::post('/tambahImageProduct', [ImageProductController::class, 'tambahImageProduct']);
+Route::get('/getImageProduct', [ImageProductController::class, 'getImageProduct']); 
+Route::put('/updateImageProduct/{Kode}', [ImageProductController::class, 'updateImageProduct']); 
+Route::delete('/deleteImageProduct/{Kode}', [ImageProductController::class, 'deleteImageProduct']); 
+Route::get('/getImageProduct/{id}', [ImageProductController::class, 'getImageProductById']);
+
+//gambar page customer
+Route::post('/tambahImageCustomer', [ImageCustomerController::class, 'tambahImageCustomer']);
+Route::get('/getImageCustomer', [ImageCustomerController::class, 'getImageCustomer']); 
+Route::put('/updateImageCustomer/{Kode}', [ImageCustomerController::class, 'updateImageCustomer']); 
+Route::delete('/deleteImageCustomer/{Kode}', [ImageCustomerController::class, 'deleteImageCustomer']); 
+Route::get('/getImageCustomer/{id}', [ImageCustomerController::class, 'getImageCustomerById']);
+
+//gambar mk lite
+Route::post('/tambahImageMkLite', [ImageMkLiteController::class, 'tambahImageMkLite']);
+Route::get('/getImageMkLite', [ImageMkLiteController::class, 'getImageMkLite']); 
+Route::put('/updateImageMkLite/{Kode}', [ImageMkLiteController::class, 'updateImageMkLite']); 
+Route::delete('/deleteImageMkLite/{Kode}', [ImageMkLiteController::class, 'deleteImageMkLite']); 
+Route::get('/getImageMkLite/{id}', [ImageMkLiteController::class, 'getImageMkLiteById']);
 
 //deskripsi
 Route::post('/tambahDeskripsi', [DeskripsiController::class, 'tambahDeskripsi']);
@@ -259,9 +306,51 @@ Route::put('/updateDeskripsi/{Kode}', [DeskripsiController::class, 'updateDeskri
 Route::delete('/deleteDeskripsi/{Kode}', [DeskripsiController::class, 'deleteDeskripsi']); 
 Route::get('/getDeskripsi/{id}', [DeskripsiController::class, 'getDeskripsiById']);
 
+//deskripsi product
+Route::post('/tambahDeskripsiProduct', [DeskripsiProductController::class, 'tambahDeskripsiProduct']);
+Route::get('/getDeskripsiProduct', [DeskripsiProductController::class, 'getDeskripsiProduct']); 
+Route::put('/updateDeskripsiProduct/{Kode}', [DeskripsiProductController::class, 'updateDeskripsiProduct']); 
+Route::delete('/deleteDeskripsiProduct/{Kode}', [DeskripsiProductController::class, 'deleteDeskripsiProduct']); 
+Route::get('/getDeskripsiProduct/{id}', [DeskripsiProductController::class, 'getDeskripsiProductById']);
+
+//deskripsi customer
+Route::post('/tambahDeskripsiCustomer', [DeskripsiCustomerController::class, 'tambahDeskripsiCustomer']);
+Route::get('/getDeskripsiCustomer', [DeskripsiCustomerController::class, 'getDeskripsiCustomer']); 
+Route::put('/updateDeskripsiCustomer/{Kode}', [DeskripsiCustomerController::class, 'updateDeskripsiCustomer']); 
+Route::delete('/deleteDeskripsiCustomer/{Kode}', [DeskripsiCustomerController::class, 'deleteDeskripsiCustomer']); 
+Route::get('/getDeskripsiCustomer/{id}', [DeskripsiCustomerController::class, 'getDeskripsiCustomerById']);
+
+//deskripsi mobile kasir lite
+Route::post('/tambahDeskripsiMkLite', [DeskripsiMkLiteController::class, 'tambahDeskripsiMkLite']);
+Route::get('/getDeskripsiMkLite', [DeskripsiMkLiteController::class, 'getDeskripsiMkLite']); 
+Route::put('/updateDeskripsiMkLite/{Kode}', [DeskripsiMkLiteController::class, 'updateDeskripsiMkLite']); 
+Route::delete('/deleteDeskripsiMkLite/{Kode}', [DeskripsiMkLiteController::class, 'deleteDeskripsiMkLite']); 
+Route::get('/getDeskripsiMkLite/{id}', [DeskripsiMkLiteController::class, 'getDeskripsiMkLiteById']);
+
 //judul
 Route::post('/tambahTitle', [TitleController::class, 'tambahTitle']);
 Route::get('/getTitle', [TitleController::class, 'getTitle']); 
 Route::put('/updateTitle/{Kode}', [TitleController::class, 'updateTitle']); 
 Route::delete('/deleteTitle/{Kode}', [TitleController::class, 'deleteTitle']); 
 Route::get('/getTitle/{id}', [TitleController::class, 'getTitleById']);
+
+//judul product
+Route::post('/tambahTitleProduct', [TitleProductController::class, 'tambahTitleProduct']);
+Route::get('/getTitleProduct', [TitleProductController::class, 'getTitleProduct']); 
+Route::put('/updateTitleProduct/{Kode}', [TitleProductController::class, 'updateTitleProduct']); 
+Route::delete('/deleteTitleProduct/{Kode}', [TitleProductController::class, 'deleteTitleProduct']); 
+Route::get('/getTitleProduct/{id}', [TitleProductController::class, 'getTitleProductById']);
+
+//judul customer
+Route::post('/tambahTitleCustomer', [TitleCustomerController::class, 'tambahTitleCustomer']);
+Route::get('/getTitleCustomer', [TitleCustomerController::class, 'getTitleCustomer']); 
+Route::put('/updateTitleCustomer/{Kode}', [TitleCustomerController::class, 'updateTitleCustomer']); 
+Route::delete('/deleteTitleCustomer/{Kode}', [TitleCustomerController::class, 'deleteTitleCustomer']); 
+Route::get('/getTitleCustomer/{id}', [TitleCustomerController::class, 'getTitleCustomerById']);
+
+//judul mobile kasir lite
+Route::post('/tambahTitleMkLite', [TitleMkLiteController::class, 'tambahTitleMkLite']);
+Route::get('/getTitleMkLite', [TitleMkLiteController::class, 'getTitleMkLite']); 
+Route::put('/updateTitleMkLite/{Kode}', [TitleMkLiteController::class, 'updateTitleMkLite']); 
+Route::delete('/deleteTitle/{Kode}', [TitleMkLiteController::class, 'deleteTitleMkLite']); 
+Route::get('/getTitleMkLite/{id}', [TitleMkLiteController::class, 'getTitleMkLiteById']);

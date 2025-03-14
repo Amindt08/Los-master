@@ -40,14 +40,14 @@ export const API_ENDPOINTS = {
   UPDATEJAMINANBYID: (no_pengajuan: string) => `${api_url}/updatejaminanbyid/${no_pengajuan}`,
   GETJAMINANBYNOPENGAJUAN: (no_pengajuan: string) => `${api_url}/getjaminanbyid/${no_pengajuan}`,
   DELETEJAMINANBYID: (no_pengajuan: string, jenisAgunan: string) => `${api_url}/deletejaminanbyid/${no_pengajuan}/${jenisAgunan}`,
-  
+
   //finansial
   FINANCIAL: `${api_url}/finansial`,
   GETALLFINANCIAL: `${api_url}/getallfinansial`,
   GETFINANCIALBYNOPENGAJUAN: (no_pengajuan: string) => `${api_url}/getfinansialbynopengajuan/${no_pengajuan}`,
   GETFINANCIALBYCIF: (cif: string) => `${api_url}/getfinansialbycif/${cif}`,
   UPDATEFINANCIALBYID: (no_pengajuan: string) => `${api_url}/updatefinansialbyid/${no_pengajuan}`,
-  
+
   //survey
   GETSURVEY: `${api_url}/getSurvey`,
   ADDSURVEY: `${api_url}/addSurvey`,
@@ -60,13 +60,13 @@ export const API_ENDPOINTS = {
   GETALLASPEK: `${api_url}/getallaspek`,
   GETASPEKBYNOPENGAJUAN: (no_pengajuan: string) => `${api_url}/getaspekbynopengajuan/${no_pengajuan}`,
   UPDATEASPEKBYID: (no_pengajuan: string) => `${api_url}/updateaspekbyid/${no_pengajuan}`,
-  
+
   //limac
   LIMAC: `${api_url}/limac`,
   GETALLLIMAC: `${api_url}/getalllimac`,
   GETLIMACBYNOPENGAJUAN: (no_pengajuan: string) => `${api_url}/getlimacbynopengajuan/${no_pengajuan}`,
   UPDATELIMACBYID: (no_pengajuan: string) => `${api_url}/updatelimacbyid/${no_pengajuan}`,
-  
+
 
   //pengajuan kredit
   GETGOLONGANKREDIT: `${api_url}/getgolongankredit`,
@@ -183,11 +183,41 @@ export const API_ENDPOINTS = {
   UPDATENAVBAR: (Kode: string) => `${api_url}/updateNavbar/${Kode}`,
   DELETENAVBAR: (Kode: string) => `${api_url}/deleteNavbar/${Kode}`,
 
+  //Topbar
+  GETTOPBAR: `${api_url}/getTopbar`,
+  TAMBAHTOPBAR: `${api_url}/tambahTopbar`,
+  UPDATETOPBAR: (Kode: string) => `${api_url}/updateTopbar/${Kode}`,
+  DELETETOPBAR: (Kode: string) => `${api_url}/deleteTopbar/${Kode}`,
+
+  //Sidebar Product
+  GETSIDEBARPRODUCT: `${api_url}/getSidebarProduct`,
+  TAMBAHSIDEBARPRODUCT: `${api_url}/tambahSidebarProduct`,
+  UPDATESIDEBARPRODUCT: (Kode: string) => `${api_url}/updateSidebarProduct/${Kode}`,
+  DELETESIDEBARPRODUCT: (Kode: string) => `${api_url}/deleteSidebarProduct/${Kode}`,
+
   //Gambar
   GETIMAGE: `${api_url}/getImage`,
   TAMBAHIMAGE: `${api_url}/tambahImage`,
   UPDATEIMAGE: (Kode: string) => `${api_url}/updateImage/${Kode}`,
   DELETEIMAGE: (Kode: string) => `${api_url}/deleteImage/${Kode}`,
+
+  //Gambar page product
+  GETIMAGEPRODUCT: `${api_url}/getImageProduct`,
+  TAMBAHIMAGEPRODUCT: `${api_url}/tambahImageProduct`,
+  UPDATEIMAGEPRODUCT: (Kode: string) => `${api_url}/updateImageProduct/${Kode}`,
+  DELETEIMAGEPRODUCT: (Kode: string) => `${api_url}/deleteImageProduct/${Kode}`,
+
+  //Gambar customer
+  GETIMAGECUSTOMER: `${api_url}/getImageCustomer`,
+  TAMBAHIMAGECUSTOMER: `${api_url}/tambahImageCustomer`,
+  UPDATEIMAGECUSTOMER: (Kode: string) => `${api_url}/updateImageCustomer/${Kode}`,
+  DELETEIMAGECUSTOMER: (Kode: string) => `${api_url}/deleteImageCustomer/${Kode}`,
+
+  //Gambar mk lite
+  GETIMAGEMKLITE: `${api_url}/getImageMkLite`,
+  TAMBAHIMAGEMKLITE: `${api_url}/tambahImageMkLite`,
+  UPDATEIMAGEMKLITE: (Kode: string) => `${api_url}/updateImageMkLite/${Kode}`,
+  DELETEIMAGEMKLITE: (Kode: string) => `${api_url}/deleteImageMkLite/${Kode}`,
 
   //Deskripsi
   GETDESKRIPSI: `${api_url}/getDeskripsi`,
@@ -195,9 +225,48 @@ export const API_ENDPOINTS = {
   UPDATEDESKRIPSI: (Kode: string) => `${api_url}/updateDeskripsi/${Kode}`,
   DELETEDESKRIPSI: (Kode: string) => `${api_url}/deleteDeskripsi/${Kode}`,
 
+  //Deskripsi product
+  GETDESKRIPSIPRODUCT: `${api_url}/getDeskripsiProduct`,
+  TAMBAHDESKRIPSIPRODUCT: `${api_url}/tambahDeskripsiProduct`,
+  UPDATEDESKRIPSIPRODUCT: (Kode: string) => `${api_url}/updateDeskripsiProduct/${Kode}`,
+  DELETEDESKRIPSIPRODUCT: (Kode: string) => `${api_url}/deleteDeskripsiProduct/${Kode}`,
+
+  //Deskripsi customer
+  GETDESKRIPSICUSTOMER: `${api_url}/getDeskripsiCustomer`,
+  TAMBAHDESKRIPSICUSTOMER: `${api_url}/tambahDeskripsiCustomer`,
+  UPDATEDESKRIPSICUSTOMER: (Kode: string) => `${api_url}/updateDeskripsiCustomer/${Kode}`,
+  DELETEDESKRIPSICUSTOMER: (Kode: string) => `${api_url}/deleteDeskripsiCustomer/${Kode}`,
+
+  //Deskripsi mobile kasir lite
+  GETDESKRIPSIMKLITE: `${api_url}/getDeskripsiMkLite`,
+  TAMBAHDESKRIPSIMKLITE: `${api_url}/tambahDeskripsiMkLite`,
+  UPDATEDESKRIPSIMKLITE: (Kode: string) => `${api_url}/updateDeskripsiMkLite/${Kode}`,
+  DELETEDESKRIPSIMKLITE: (Kode: string) => `${api_url}/deleteDeskripsiMkLite/${Kode}`,
+
   //Judul
   GETTITLE: `${api_url}/getTitle`,
   TAMBAHTITLE: `${api_url}/tambahTitle`,
   UPDATETITLE: (Kode: string) => `${api_url}/updateTitle/${Kode}`,
   DELETETITLE: (Kode: string) => `${api_url}/deleteTitle/${Kode}`,
+
+  //Judul product
+  GETTITLEPRODUCT: `${api_url}/getTitleProduct`,
+  TAMBAHTITLEPRODUCT: `${api_url}/tambahTitleProduct`,
+  UPDATETITLEPRODUCT: (Kode: string) => `${api_url}/updateTitleProduct/${Kode}`,
+  DELETETITLEPRODUCT: (Kode: string) => `${api_url}/deleteTitleProduct/${Kode}`,
+
+  //Judul customer
+  GETTITLECUSTOMER: `${api_url}/getTitleCustomer`,
+  TAMBAHTITLECUSTOMER: `${api_url}/tambahTitleCustomer`,
+  UPDATETITLECUSTOMER: (Kode: string) => `${api_url}/updateTitleCustomer/${Kode}`,
+  DELETETITLECUSTOMER: (Kode: string) => `${api_url}/deleteTitleCustomer/${Kode}`,
+
+  //Judul mobile kasir lite
+  GETTITLEMKLITE: `${api_url}/getTitleMkLite`,
+  TAMBAHTITLEMKLITE: `${api_url}/tambahTitleMkLite`,
+  UPDATETITLEMKLITE: (Kode: string) => `${api_url}/updateTitleMkLite/${Kode}`,
+  DELETETITLEMKLITE: (Kode: string) => `${api_url}/deleteTitleMkLite/${Kode}`,
+
+
+
 };

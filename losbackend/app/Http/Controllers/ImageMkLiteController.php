@@ -2,34 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Image;
+use App\Models\ImageMkLite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
-class ImageController extends Controller
+class ImageMkLiteController extends Controller
 {
-    public function tambahImage(Request $request)
+    public function tambahImageMkLite(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         return DB::transaction(function () use ($request) {
-            $data = new Image;
+            $data = new ImageMkLite;
 
             DB::table('image')->lockForUpdate()->get();
 
-            $kodeTerakhir = Image::max('Kode');
+            $kodeTerakhir = ImageMkLite::max('Kode');
             $nomorBaru = ($kodeTerakhir ?? 0) + 1;
 
             $data->Kode = $nomorBaru;
 
             if ($request->hasFile('image')) {
                 $fileName = $request->file('image')->getClientOriginalName();
-                $request->file('image')->move('images/', $fileName);
+                $request->file('image')->move('mk_lite_images/', $fileName);
                 $data->image = $fileName;
                 $data->save();
             }
@@ -38,9 +38,9 @@ class ImageController extends Controller
         });
     }
 
-    public function getImageById($id)
+    public function getImageMkLiteById($id)
     {
-        $data = Image::where('Kode', $id)->first();
+        $data = ImageMkLite::where('Kode', $id)->first();
 
         if (!$data) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
@@ -48,19 +48,19 @@ class ImageController extends Controller
         return response()->json($data);
     }
 
-    public function getImage()
+    public function getImageMkLite()
     {
-        $data = Image::all();
+        $data = ImageMkLite::all();
         return response()->json($data);
     }
 
-    public function updateImage(Request $request, $id)
+    public function updateImageMkLite(Request $request, $id)
     {
-        $data = Image::where('Kode', $id)->firstOrFail();
+        $data = ImageMkLite::where('Kode', $id)->firstOrFail();
 
         if ($request->hasFile('image')) {
             $request->validate([
-                'image' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+                'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
             $oldImagePath = 'images/' . $data->image; 
@@ -79,9 +79,9 @@ class ImageController extends Controller
         return response()->json(['message' => 'Gambar berhasil diperbarui', 'image' => $data]);
     }
 
-    public function deleteImage($id)
+    public function deleteImageMkLite($id)
     {
-        $data = Image::where('Kode', $id)->first();
+        $data = ImageMkLite::where('Kode', $id)->first();
         if (!$data) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }

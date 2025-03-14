@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Title;
+use App\Models\TitleMkLite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
-class TitleController extends Controller
+class TitleMkLiteController extends Controller
 {
 
-    public function tambahTitle(Request $request)
+    public function tambahTitleMkLite(Request $request)
     {
         return DB::transaction(function () use ($request) {
-            $title = new Title;
+            $title = new TitleMkLite;
             
-            DB::table('judul')->lockForUpdate()->get();
+            DB::table('judul_customer')->lockForUpdate()->get();
 
-            $kodeTerakhir = Title::max('Kode');
+            $kodeTerakhir = TitleMkLite::max('Kode');
             $nomorBaru = ($kodeTerakhir ?? 0) + 1;
 
             $title->Kode = $nomorBaru;
@@ -29,15 +29,15 @@ class TitleController extends Controller
         });
     }
 
-    public function getTitle()
+    public function getTitleMkLite()
     {
-        $title = Title::all();
+        $title = TitleMkLite::all();
         return response()->json($title);
     }
 
-    public function getTitleById($id)
+    public function getTitleMkLiteById($id)
 {
-    $title = Title::where('Kode', $id)->first();
+    $title = TitleMkLite::where('Kode', $id)->first();
 
     if (!$title) {
         return response()->json(['message' => 'Data tidak ditemukan'], 404);
@@ -45,16 +45,16 @@ class TitleController extends Controller
     return response()->json($title);
 }
 
-    public function updateTitle(Request $request, string $id)
+    public function updateTitleMkLite(Request $request, string $id)
     {
-        $title = Title::where('Kode', $id)->firstOrFail();
+        $title = TitleMkLite::where('Kode', $id)->firstOrFail();
         $title->update($request->all());
         return response()->json($title);
     }
 
-    public function deleteTitle($id)
+    public function deleteTitleMkLite($id)
     {
-        $title = Title::where('Kode', $id)->first();
+        $title = TitleMkLite::where('Kode', $id)->first();
         if (!$title) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }

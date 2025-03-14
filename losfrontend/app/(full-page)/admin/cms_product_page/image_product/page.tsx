@@ -6,8 +6,8 @@ import DataTableWithCRUD from '@/app/(full-page)/admin/component/datatable/page'
 import { ProgressSpinner } from 'primereact/progressspinner';
 import DataTableImage from '../../component/datatable2/page';
 
-const TambahGambar = () => {
-    const [Image, setImage] = useState([]);
+const TambahGambarProduct = () => {
+    const [ImageProduct, setImageProduct] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const toast = useRef<Toast>(null);
     // const [formData, setFormData] = useState ([
@@ -21,9 +21,9 @@ const TambahGambar = () => {
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            const imageResponse = await axios.get(API_ENDPOINTS.GETIMAGE);
+            const imageProductResponse = await axios.get(API_ENDPOINTS.GETIMAGEPRODUCT);
 
-            setImage(imageResponse.data);
+            setImageProduct(imageProductResponse.data);
         } catch (error) {
             console.error("Error fetching data:", error);
             toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal mengambil data', life: 3000 });
@@ -38,7 +38,7 @@ const TambahGambar = () => {
             return;   
         }
     
-        const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/svg+xml', 'image/webp', 'image/gif'];
+        const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'image/svg+xml'];
         if (!validTypes.includes(image.type)) {
             toast.current?.show({ severity: 'warn', summary: 'Warning', detail: 'Format gambar tidak didukung (harus jpg/png)', life: 3000 });
             return;
@@ -53,7 +53,7 @@ const TambahGambar = () => {
             const formData = new FormData();
             formData.append("image", image);
     
-            await axios.post(API_ENDPOINTS.TAMBAHIMAGE, formData, {
+            await axios.post(API_ENDPOINTS.TAMBAHIMAGEPRODUCT, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -83,7 +83,7 @@ const TambahGambar = () => {
             const formData = new FormData();
             formData.append("image", image);
 
-            await axios.put(API_ENDPOINTS.UPDATEIMAGE(Kode), formData, {
+            await axios.put(API_ENDPOINTS.UPDATEIMAGEPRODUCT(Kode), formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -97,7 +97,7 @@ const TambahGambar = () => {
 
     const handleDelete = async (Kode: string) => {
         try {
-            await axios.delete(API_ENDPOINTS.DELETEIMAGE(Kode));
+            await axios.delete(API_ENDPOINTS.DELETEIMAGEPRODUCT(Kode));
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Gambar berhasil dihapus', life: 3000 });
             fetchData();
         } catch (error) {
@@ -115,7 +115,7 @@ const TambahGambar = () => {
                 </div>
             ) : (
                 <DataTableImage
-                    data={Image}
+                    data={ImageProduct}
                     loading={isLoading}
                     singleInput={true} // set false jika btuh 2 input
                     columns={[
@@ -132,4 +132,4 @@ const TambahGambar = () => {
     );
 };
 
-export default TambahGambar;
+export default TambahGambarProduct;

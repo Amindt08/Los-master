@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Title;
+use App\Models\TitleCustomer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
-class TitleController extends Controller
+class TitleCustomerController extends Controller
 {
 
-    public function tambahTitle(Request $request)
+    public function tambahTitleCustomer(Request $request)
     {
         return DB::transaction(function () use ($request) {
-            $title = new Title;
+            $title = new TitleCustomer;
             
-            DB::table('judul')->lockForUpdate()->get();
+            DB::table('judul_customer')->lockForUpdate()->get();
 
-            $kodeTerakhir = Title::max('Kode');
+            $kodeTerakhir = TitleCustomer::max('Kode');
             $nomorBaru = ($kodeTerakhir ?? 0) + 1;
 
             $title->Kode = $nomorBaru;
@@ -29,15 +29,15 @@ class TitleController extends Controller
         });
     }
 
-    public function getTitle()
+    public function getTitleCustomer()
     {
-        $title = Title::all();
+        $title = TitleCustomer::all();
         return response()->json($title);
     }
 
-    public function getTitleById($id)
+    public function getTitleCustomerById($id)
 {
-    $title = Title::where('Kode', $id)->first();
+    $title = TitleCustomer::where('Kode', $id)->first();
 
     if (!$title) {
         return response()->json(['message' => 'Data tidak ditemukan'], 404);
@@ -45,16 +45,16 @@ class TitleController extends Controller
     return response()->json($title);
 }
 
-    public function updateTitle(Request $request, string $id)
+    public function updateTitleCustomer(Request $request, string $id)
     {
-        $title = Title::where('Kode', $id)->firstOrFail();
+        $title = TitleCustomer::where('Kode', $id)->firstOrFail();
         $title->update($request->all());
         return response()->json($title);
     }
 
-    public function deleteTitle($id)
+    public function deleteTitleCustomer($id)
     {
-        $title = Title::where('Kode', $id)->first();
+        $title = TitleCustomer::where('Kode', $id)->first();
         if (!$title) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }

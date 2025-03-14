@@ -21,7 +21,7 @@ const TambahGambar = () => {
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            const imageResponse = await axios.get(API_ENDPOINTS.GETIMAGE);
+            const imageResponse = await axios.get(API_ENDPOINTS.GETIMAGEMKLITE);
 
             setImage(imageResponse.data);
         } catch (error) {
@@ -38,7 +38,7 @@ const TambahGambar = () => {
             return;   
         }
     
-        const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/svg+xml', 'image/webp', 'image/gif'];
+        const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/svg+xml', 'image/webp'];
         if (!validTypes.includes(image.type)) {
             toast.current?.show({ severity: 'warn', summary: 'Warning', detail: 'Format gambar tidak didukung (harus jpg/png)', life: 3000 });
             return;
@@ -53,7 +53,7 @@ const TambahGambar = () => {
             const formData = new FormData();
             formData.append("image", image);
     
-            await axios.post(API_ENDPOINTS.TAMBAHIMAGE, formData, {
+            await axios.post(API_ENDPOINTS.TAMBAHIMAGEMKLITE, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -83,7 +83,7 @@ const TambahGambar = () => {
             const formData = new FormData();
             formData.append("image", image);
 
-            await axios.put(API_ENDPOINTS.UPDATEIMAGE(Kode), formData, {
+            await axios.put(API_ENDPOINTS.UPDATEIMAGEMKLITE(Kode), formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -97,7 +97,7 @@ const TambahGambar = () => {
 
     const handleDelete = async (Kode: string) => {
         try {
-            await axios.delete(API_ENDPOINTS.DELETEIMAGE(Kode));
+            await axios.delete(API_ENDPOINTS.DELETEIMAGEMKLITE(Kode));
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Gambar berhasil dihapus', life: 3000 });
             fetchData();
         } catch (error) {

@@ -76,9 +76,8 @@ const DataTableImage = ({
     const handleImageChange = (event: any) => {
         const selectedImage = event.files?.[0];
         if (selectedImage) {
-            setFile(selectedImage); // Simpan file ke state
+            setFile(selectedImage); 
 
-            // Convert file ke base64 untuk pratinjau
             const reader = new FileReader();
             reader.onloadend = () => {
                 setSelectedImage(reader.result as string);
@@ -164,7 +163,7 @@ const DataTableImage = ({
                                 <label htmlFor="fileUpload" className='font-bold'>Upload Media</label>
                                 <FileUpload
                                     name="media"
-                                    url={'http://localhost/api/tambahImage'}
+                                    // url={'http://localhost/api/tambahImage'}
                                     multiple
                                     accept="image/*"
                                     maxFileSize={1000000}
@@ -204,7 +203,7 @@ const DataTableImage = ({
                             <label htmlFor="fileUpload" className='font-bold'>Upload Media</label>
                             <FileUpload
                                 name="media"
-                                url={'http://localhost/api/updateImage'}
+                                // url={'http://localhost/api/updateImage'}
                                 multiple
                                 accept="image/*"
                                 maxFileSize={1000000}
