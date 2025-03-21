@@ -5,14 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class Section extends Model
 {
     use HasFactory;
-    protected $table = 'section_gambar';
+    protected $table = 'section_landing';
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'id_section',
-        'gambar'
+        'section',
+        'judul',
+        'deskripsi',
+        'id_gambar',
+        'kontak'
     ];
 }

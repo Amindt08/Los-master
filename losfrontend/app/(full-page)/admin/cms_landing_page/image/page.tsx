@@ -9,7 +9,10 @@ import DataTableImage from '../../component/datatable2/page';
 const TambahGambar = () => {
     const [Image, setImage] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [idSection, setIdSection] = useState<string | number>("");
     const toast = useRef<Toast>(null);
+    const idSectionRef = useRef<string | number>("");
+
     // const [formData, setFormData] = useState ([
     //     image: ''
     // ])
@@ -22,6 +25,8 @@ const TambahGambar = () => {
         setIsLoading(true);
         try {
             const imageResponse = await axios.get(API_ENDPOINTS.GETIMAGE);
+            console.log("Teks:", imageResponse.data.text);
+            console.log("Gambar URL:", imageResponse.data.gambar);
 
             setImage(imageResponse.data);
         } catch (error) {
@@ -32,41 +37,46 @@ const TambahGambar = () => {
         }
     };
 
-    const handleAdd = async (image: File) => {
-        if (!image) {
+    const handleAdd = async (id_section: string | number, gambar: File) => {
+        if (!gambar) {
             toast.current?.show({ severity: 'warn', summary: 'Warning', detail: 'Silakan pilih gambar terlebih dahulu', life: 3000 });
-            return;   
+            return;
         }
-    
+        idSectionRef.current = id_section;
+
         const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/svg+xml', 'image/webp', 'image/gif'];
-        if (!validTypes.includes(image.type)) {
+        if (!validTypes.includes(gambar.type)) {
             toast.current?.show({ severity: 'warn', summary: 'Warning', detail: 'Format gambar tidak didukung (harus jpg/png)', life: 3000 });
             return;
         }
-    
-        if (image.size > 2 * 1024 * 1024) { // Batas 2MB
+
+        if (gambar.size > 2 * 1024 * 1024) { // Batas 2MB
             toast.current?.show({ severity: 'warn', summary: 'Warning', detail: 'Ukuran gambar terlalu besar (maks 2MB)', life: 3000 });
             return;
         }
-    
+
         try {
             const formData = new FormData();
-            formData.append("image", image);
-    
+            formData.append("id_section", isNaN(Number(id_section)) ? "" : String(Number(id_section)));
+            formData.append("gambar", gambar);
+
+
             await axios.post(API_ENDPOINTS.TAMBAHIMAGE, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             });
-    
+
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Gambar berhasil ditambahkan', life: 3000 });
             fetchData();
+
+            setIdSection(idSectionRef.current);
         } catch (error) {
             console.error('Error adding data:', error);
             toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal menambahkan data', life: 3000 });
         }
     };
-    
+
     // const handleAdd = async (image: File) => {
     //     try {
     //         await axios.post(API_ENDPOINTS.TAMBAHIMAGE, { image });
@@ -78,10 +88,10 @@ const TambahGambar = () => {
     //     }
     // };
 
-    const handleUpdate = async (Kode: string, image: File) => {
+    const handleUpdate = async (Kode: string, gambar: File) => {
         try {
             const formData = new FormData();
-            formData.append("image", image);
+            formData.append("image", gambar);
 
             await axios.put(API_ENDPOINTS.UPDATEIMAGE(Kode), formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
@@ -117,15 +127,20 @@ const TambahGambar = () => {
                 <DataTableImage
                     data={Image}
                     loading={isLoading}
-                    singleInput={true} // set false jika btuh 2 input
+                    singleInput={false} // set false jika btuh 2 input
                     columns={[
-                        { field: 'image', header: 'Image', }
+                        { field: 'id_section', header: 'Id Section', },
+                        { field: 'gambar', header: 'Gambar' }
                     ]}
                     onAdd={handleAdd}
                     onUpdate={handleUpdate}
                     onDelete={handleDelete}
-                    nameField="image"
-                    inputLabel="image"
+                    nameField="id_section"
+                    nameField2="gambar"
+                    inputLabel="Id Section"
+                    inputLabel2="Gambar"
+                    value1={idSection}
+                    onChange1={(event: any) => setIdSection(event.target.value)}
                 />
             )}
         </>

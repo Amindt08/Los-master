@@ -35,8 +35,9 @@ use App\Http\Controllers\DeskripsiMkLiteController;
 use App\Http\Controllers\TitleMkLiteController;
 use App\Http\Controllers\ImageMkLiteController;
 use App\Http\Controllers\SidebarProductController;
-
-
+use App\Http\Controllers\SectionController;
+use App\Http\Controllers\ExampleController;
+use App\Models\Example;
 use Illuminate\Support\Facades\DB;
 
 /*
@@ -251,11 +252,19 @@ Route::put('/updateKodepos/{Kode}', [KodeposController::class, 'updateKodepos'])
 Route::delete('/deleteKodepos/{Kode}', [KodeposController::class, 'deleteKodepos']); 
 
 //navbar
+Route::get('/navbars', [NavbarController::class, 'index']);
 Route::post('/tambahNavbar', [NavbarController::class, 'tambahNavbar']);
 Route::get('/getNavbar', [NavbarController::class, 'getNavbar']); 
 Route::put('/updateNavbar/{Kode}', [NavbarController::class, 'updateNavbar']); 
 Route::delete('/deleteNavbar/{Kode}', [NavbarController::class, 'deleteNavbar']); 
 Route::get('/getNavbar/{id}', [NavbarController::class, 'getNavbarById']);
+
+Route::get('/navbars', [ExampleController::class, 'index']);
+Route::post('/tambahNav', [ExampleController::class, 'tambahNav']);
+Route::get('/getNav', [ExampleController::class, 'getNav']); 
+Route::put('/updateNav/{id}', [ExampleController::class, 'updateNav']); 
+Route::delete('/deleteNav/{id}', [ExampleController::class, 'deleteNav']); 
+Route::get('/getNavById/{id}', [ExampleController::class,'getNavById']);
 
 //topbar
 Route::post('/tambahTopbar', [TopbarController::class, 'tambahTopbar']);
@@ -352,5 +361,19 @@ Route::get('/getTitleCustomer/{id}', [TitleCustomerController::class, 'getTitleC
 Route::post('/tambahTitleMkLite', [TitleMkLiteController::class, 'tambahTitleMkLite']);
 Route::get('/getTitleMkLite', [TitleMkLiteController::class, 'getTitleMkLite']); 
 Route::put('/updateTitleMkLite/{Kode}', [TitleMkLiteController::class, 'updateTitleMkLite']); 
-Route::delete('/deleteTitle/{Kode}', [TitleMkLiteController::class, 'deleteTitleMkLite']); 
+Route::delete('/deleteTitleMkLite/{Kode}', [TitleMkLiteController::class, 'deleteTitleMkLite']); 
 Route::get('/getTitleMkLite/{id}', [TitleMkLiteController::class, 'getTitleMkLiteById']);
+
+//section landing
+Route::post('/tambahSection', [SectionController::class, 'tambahSection']);
+Route::get('/getSection', [SectionController::class, 'getSection']); 
+Route::put('/updateSection/{id}', [SectionController::class, 'updateSection']); 
+Route::delete('/deleteSection/{id}', [SectionController::class, 'deleteSection']); 
+Route::get('/getSection/{id}', [SectionController::class, 'getSectionById']);
+
+Route::get('/image/{id_gambar}', function ($id_gambar) {
+    $data = DB::table('section_landing')
+        ->where('id_gambar', $id_gambar)
+        ->get();
+    return response()->json($data);
+});

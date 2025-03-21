@@ -183,6 +183,11 @@ export const API_ENDPOINTS = {
   UPDATENAVBAR: (Kode: string) => `${api_url}/updateNavbar/${Kode}`,
   DELETENAVBAR: (Kode: string) => `${api_url}/deleteNavbar/${Kode}`,
 
+  GETNAVBARLANDING: `${api_url}/getNav`,
+  TAMBAHNAVBARLANDING: `${api_url}/tambahNav`,
+  UPDATENAVBARLANDING: (id: string) => `${api_url}/updateNav/${id}`,
+  DELETENAVBARLANDING: (id: string) => `${api_url}/deleteNav/${id}`,
+
   //Topbar
   GETTOPBAR: `${api_url}/getTopbar`,
   TAMBAHTOPBAR: `${api_url}/tambahTopbar`,
@@ -267,6 +272,11 @@ export const API_ENDPOINTS = {
   UPDATETITLEMKLITE: (Kode: string) => `${api_url}/updateTitleMkLite/${Kode}`,
   DELETETITLEMKLITE: (Kode: string) => `${api_url}/deleteTitleMkLite/${Kode}`,
 
+  //Section Landing
+  GETSECTION: `${api_url}/getSection`,
+  TAMBAHSECTION: `${api_url}/tambahSection`,
+  UPDATESECTION: (Kode: string) => `${api_url}/updateSection/${Kode}`,
+  DELETESECTION: (Kode: string) => `${api_url}/deleteSection/${Kode}`,
 
 
 };

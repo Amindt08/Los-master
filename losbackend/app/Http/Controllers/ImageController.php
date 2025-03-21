@@ -14,33 +14,38 @@ class ImageController extends Controller
     public function tambahImage(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'id_section' => 'required|numeric', 
+            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         return DB::transaction(function () use ($request) {
             $data = new Image;
 
-            DB::table('image')->lockForUpdate()->get();
+            DB::table('section_gambar')->lockForUpdate()->get();
 
-            $kodeTerakhir = Image::max('Kode');
-            $nomorBaru = ($kodeTerakhir ?? 0) + 1;
+            // $kodeTerakhir = Image::max('id_section');
+            // $nomorBaru = ($kodeTerakhir ?? 0) + 1;
+            // $data->id_section = $nomorBaru;
 
-            $data->Kode = $nomorBaru;
+            $data->id_section = $request-> input('id_section');
 
-            if ($request->hasFile('image')) {
-                $fileName = $request->file('image')->getClientOriginalName();
-                $request->file('image')->move('images/', $fileName);
-                $data->image = $fileName;
+            if ($request->hasFile('gambar')) {
+                $fileName = $request->file('gambar')->getClientOriginalName();
+                $request->file('gambar')->move('images/', $fileName);
+                $data->gambar = $fileName;
                 $data->save();
             }
 
-            return response()->json(['message' => 'Gambar berhasil diunggah', 'image' => $data]);
+            return response()->json([
+                'message' => 'Gambar berhasil diunggah',
+                'text' => 'Gambar berhasil disimpan dengan ID: ' . $data->id_section,
+            ]);
         });
     }
 
     public function getImageById($id)
     {
-        $data = Image::where('Kode', $id)->first();
+        $data = Image::where('id', $id)->first();
 
         if (!$data) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);

@@ -19,9 +19,9 @@ const DataTableImage = ({
     columns,
     singleInput = false,
     imageInput = false,
-    idField = 'Kode',
-    nameField = 'image',
-    nameField2 = 'provinsi_id',
+    idField = 'id',
+    nameField = 'id_section',
+    nameField2 = 'gambar',
     addButtonLabel = 'Tambah',
     editButtonLabel = 'Perbarui',
     deleteButtonLabel = 'Hapus',
@@ -29,6 +29,7 @@ const DataTableImage = ({
     editDialogHeader = 'Edit Data',
     deleteDialogHeader = 'Hapus Data',
     inputLabel = 'Data',
+    inputLabel2 = 'Data'
 }: any) => {
     const [selectedRow, setSelectedRow] = useState<any>(null);
     const [visibleAdd, setVisibleAdd] = useState(false);
@@ -40,11 +41,14 @@ const DataTableImage = ({
     const [editValue2, setEditValue2] = useState<any>(null);
     const [isUploading, setIsUploading] = useState(false);
     const [formData, setFormData] = useState({
-        pictures: ''
+        inputValue: '',
+        // image: null
     });
+    const [formData2, setFormData2] = useState({});
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        console.log("Data yang dikirim:", formData);
         if (singleInput) {
             onAdd(inputValue); // Send only inputValue
         } else {
@@ -76,7 +80,7 @@ const DataTableImage = ({
     const handleImageChange = (event: any) => {
         const selectedImage = event.files?.[0];
         if (selectedImage) {
-            setFile(selectedImage); 
+            setFile(selectedImage);
 
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -123,7 +127,7 @@ const DataTableImage = ({
                 <Button label={addButtonLabel} icon="pi pi-plus" style={{ border: 'none', color: '#333', transition: 'transform 0.3s ease-in-out' }} className='bg-blue-200 w-full sm:w-auto hover:scale-110' onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'} onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'} onClick={() => setVisibleAdd(true)} />
             </div>
             <DataTable value={data} responsiveLayout="stack" breakpoint="960px" paginator rows={5} rowsPerPageOptions={[5, 10]}>
-                <Column key="Kode" field="Kode" header="Kode" className='w-full sm:w-2' />
+                {/* <Column key="id_section" field="id_section" header="Id Section" className='w-full sm:w-2' /> */}
                 {columns.map((col: any) => (
                     <Column key={col.field} field={col.field} header={col.header} className={columns.length === 1 ? 'w-full sm:w-7' : 'w-full sm:w-4'} />
                 ))}
@@ -158,9 +162,23 @@ const DataTableImage = ({
             <Dialog header={addDialogHeader} visible={visibleAdd} style={{ width: '90vw', maxWidth: '500px' }} onHide={() => setVisibleAdd(false)}>
                 <div className="p-fluid mb-5">
                     <form onSubmit={handleSubmit}>
+                        <div className="field">
+                            <label htmlFor="inputValue" className='font-bold'>{inputLabel}</label>
+                            <InputText
+                                id="inputValue"
+                                value={formData.inputValue} 
+                                onChange={(e) =>
+                                    setFormData(prev => ({
+                                        ...prev, 
+                                        inputValue: e.target.value
+                                    }))
+                                }
+                                required className="w-full"
+                            />
+                        </div>
                         {!imageInput && (
                             <div className="field">
-                                <label htmlFor="fileUpload" className='font-bold'>Upload Media</label>
+                                <label htmlFor="fileUpload" className='font-bold'>{inputLabel2}</label>
                                 <FileUpload
                                     name="media"
                                     // url={'http://localhost/api/tambahImage'}
@@ -173,9 +191,9 @@ const DataTableImage = ({
                                         if (file) {
                                             const reader = new FileReader();
                                             reader.onloadend = () => {
-                                                setFormData(prev => ({
+                                                setFormData2(prev => ({
                                                     ...prev,
-                                                    image: reader.result
+                                                    gambar: reader.result
                                                 }));
                                             };
                                             reader.readAsDataURL(file);
