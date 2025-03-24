@@ -283,8 +283,8 @@ Route::get('/getSidebarProduct/{id}', [SidebarProductController::class, 'getSide
 //gambar
 Route::post('/tambahImage', [ImageController::class, 'tambahImage']);
 Route::get('/getImage', [ImageController::class, 'getImage']); 
-Route::put('/updateImage/{Kode}', [ImageController::class, 'updateImage']); 
-Route::delete('/deleteImage/{Kode}', [ImageController::class, 'deleteImage']); 
+Route::put('/updateImage/{id}', [ImageController::class, 'updateImage']); 
+Route::delete('/deleteImage/{id}', [ImageController::class, 'deleteImage']); 
 Route::get('/getImage/{id}', [ImageController::class, 'getImageById']);
 
 //gambar page product

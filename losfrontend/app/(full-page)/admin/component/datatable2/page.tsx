@@ -35,35 +35,76 @@ const DataTableImage = ({
     const [visibleAdd, setVisibleAdd] = useState(false);
     const [visibleEdit, setVisibleEdit] = useState(false);
     const [visibleDelete, setVisibleDelete] = useState(false);
-    const [inputValue, setInputValue] = useState<string | File>('');
+    const [inputValue, setInputValue] = useState<string | number>('');
     const [inputValue2, setInputValue2] = useState<any>(null);
     const [editValue, setEditValue] = useState('');
     const [editValue2, setEditValue2] = useState<any>(null);
     const [isUploading, setIsUploading] = useState(false);
-    const [formData, setFormData] = useState({
-        inputValue: '',
-        // image: null
+    const [formData, setFormData] = useState<{ id_section: string | number; gambar: File | null }>({
+        id_section: '',
+        gambar: null,
     });
-    const [formData2, setFormData2] = useState({});
+
+
+    // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+
+    //     console.log("Data yang dikirim:", formData);
+
+    //     if (singleInput) {
+    //         onAdd(inputValue); // Send only inputValue
+    //     } else {
+    //         onAdd(inputValue, inputValue2);// Tambah value kode dari inputValue2
+    //     }
+
+    //     setInputValue('');
+    //     setInputValue2(null);
+    //     setVisibleAdd(false);
+    // };
+
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         console.log("Data yang dikirim:", formData);
+
         if (singleInput) {
-            onAdd(inputValue); // Send only inputValue
+            onAdd(formData.id_section); // Kirim id_section
         } else {
-            onAdd(inputValue, inputValue2?.[idField]);// Tambah value kode dari inputValue2
+            onAdd(formData.id_section, inputValue2); // inputValue2 harus dideklarasikan
         }
-        setInputValue('');
-        setInputValue2(null);
+
+        // Reset state setelah submit
+        setFormData({ id_section: '', gambar: null });
         setVisibleAdd(false);
     };
+
+    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+
+    //     if (!formData.inputValue) {
+    //         alert("Field inputValue harus diisi!");
+    //         return;
+    //     }
+
+    //     const formDataToSend = new FormData();
+    //     formDataToSend.append("id_section", formData.inputValue);
+    //     if (formData.gambar) {
+    //         formDataToSend.append("gambar", formData.gambar);
+    //     }
+
+    //     onAdd(formDataToSend); // Kirim sebagai FormData
+
+    //     setFormData({ inputValue: '', gambar: null });
+    //     setFile(null);
+    //     setVisibleAdd(false);
+    // };
 
     const handleUpdate = () => {
         if (singleInput) {
             onUpdate(selectedRow[idField], editValue);// Send only inputValue
         } else {
-            onUpdate(selectedRow[idField], editValue, editValue2?.[idField]);// Tambah value kode dari inputValue2
+            onUpdate(selectedRow[idField], editValue, editValue2);// Tambah value kode dari inputValue2
         }
         setEditValue('');
         setEditValue2(null);
@@ -92,27 +133,50 @@ const DataTableImage = ({
 
 
     // const handleImageUpload = async () => {
-    //     if (!file) return;
-    //     console.log('uploading', file);
-    //     const formData = new FormData();
-    //     formData.append('image', file);
-    //     try {
-    //         await axios.post('http://localhost:8000/api/tambahImage', formData, {
-    //             headers: {
-    //                 'Content-Type': 'multipart/form-data'
-    //             }
-    //         });
-    //         console.log('success');
-    //     } catch (error) {
-    //         console.error('Error uploading', error);
-    //         console.log('error');
+    //     if (!file) {
+    //         console.warn("Tidak ada file yang dipilih");
+    //         return;
     //     }
-    // }
+
+    //     const formData = new FormData();
+    //     formData.append("id_section", inputValue); // Kirim ID section
+    //     formData.append("gambar", file); // Kirim file gambar
+
+    //     try {
+    //         console.log('Uploading...');
+    //         const response = await fetch("http://localhost/api/tambahImage", {
+    //             method: "POST",
+    //             body: formData,
+    //         });
+
+    //         const result = await response.json();
+    //         if (response.ok) {
+    //             console.log("Upload berhasil:", result);
+    //         } else {
+    //             console.error("Upload gagal:", result);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error uploading", error);
+    //     }
+    // };
+
+
+
+    // const handleImageChange = (event: any) => {
+    //     const file = event.files?.[0];
+    //     console.log('image change')
+    //     if (file) {
+    //         setFormData(prev => ({
+    //             ...prev,
+    //             gambar: file
+    //         }));
+    //     }
+    // };
 
     const handleImageUpload = async () => {
         if (!file) return;
         console.log('uploading');
-        setInputValue(file);
+        setInputValue2(file);
         try {
             console.log('success');
         } catch (error) {
@@ -120,6 +184,8 @@ const DataTableImage = ({
             console.log('error');
         }
     }
+
+
 
     return (
         <div className='mb-5'>
@@ -163,17 +229,18 @@ const DataTableImage = ({
                 <div className="p-fluid mb-5">
                     <form onSubmit={handleSubmit}>
                         <div className="field">
-                            <label htmlFor="inputValue" className='font-bold'>{inputLabel}</label>
+                            <label htmlFor="id_section" className='font-bold'>{inputLabel}</label>
                             <InputText
-                                id="inputValue"
-                                value={formData.inputValue} 
+                                id="id_section"
+                                value={formData.id_section}
                                 onChange={(e) =>
                                     setFormData(prev => ({
-                                        ...prev, 
-                                        inputValue: e.target.value
+                                        ...prev,
+                                        id_section: isNaN(Number(e.target.value)) ? e.target.value : Number(e.target.value)
                                     }))
                                 }
-                                required className="w-full"
+                                required
+                                className="w-full"
                             />
                         </div>
                         {!imageInput && (
@@ -187,16 +254,13 @@ const DataTableImage = ({
                                     maxFileSize={1000000}
                                     onSelect={(e) => {
                                         handleImageChange(e);
-                                        const file = e.files[0];
+                                        const file = e.files?.[0];
+                                        console.log('image change')
                                         if (file) {
-                                            const reader = new FileReader();
-                                            reader.onloadend = () => {
-                                                setFormData2(prev => ({
-                                                    ...prev,
-                                                    gambar: reader.result
-                                                }));
-                                            };
-                                            reader.readAsDataURL(file);
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                gambar: file
+                                            }));
                                         }
                                     }}
                                     emptyTemplate={<p className="m-0">Seret dan lepas file di sini atau klik untuk memilih.</p>}
@@ -216,27 +280,39 @@ const DataTableImage = ({
             </Dialog>
             <Dialog header={`${editDialogHeader}: ${selectedRow?.[nameField]}`} visible={visibleEdit} style={{ width: '90vw', maxWidth: '500px' }} onHide={() => setVisibleEdit(false)}>
                 <div className="p-fluid">
+                    <div className="field">
+                        <label htmlFor="id_section" className='font-bold'>{inputLabel}</label>
+                        <InputText
+                            id="id_section"
+                            value={formData.id_section}
+                            onChange={(e) =>
+                                setFormData(prev => ({
+                                    ...prev,
+                                    id_section: isNaN(Number(e.target.value)) ? e.target.value : Number(e.target.value)
+                                }))
+                            }
+                            required
+                            className="w-full"
+                        />
+                    </div>
                     {!imageInput && (
                         <div className="field">
-                            <label htmlFor="fileUpload" className='font-bold'>Upload Media</label>
+                            <label htmlFor="fileUpload" className='font-bold'>{inputLabel2}</label>
                             <FileUpload
                                 name="media"
-                                // url={'http://localhost/api/updateImage'}
+                                // url={'http://localhost/api/tambahImage'}
                                 multiple
                                 accept="image/*"
                                 maxFileSize={1000000}
                                 onSelect={(e) => {
                                     handleImageChange(e);
-                                    const file = e.files[0];
+                                    const file = e.files?.[0];
+                                    console.log('image change')
                                     if (file) {
-                                        const reader = new FileReader();
-                                        reader.onloadend = () => {
-                                            setFormData(prev => ({
-                                                ...prev,
-                                                image: reader.result
-                                            }));
-                                        };
-                                        reader.readAsDataURL(file);
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            gambar: file
+                                        }));
                                     }
                                 }}
                                 emptyTemplate={<p className="m-0">Seret dan lepas file di sini atau klik untuk memilih.</p>}

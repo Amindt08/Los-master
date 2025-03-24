@@ -45,12 +45,12 @@ const DataTableWithCRUD = ({
     const [inputValue2, setInputValue2] = useState('');
     const [inputValue3, setInputValue3] = useState('');
     const [inputValue4, setInputValue4] = useState<{ id: number; gambar: string } | null>(null);
-    const [inputValue5, setInputValue5] = useState('');
+    const [inputValue5, setInputValue5] = useState<any>(null);
     const [editValue, setEditValue] = useState('');
     const [editValue2, setEditValue2] = useState('');
     const [editValue3, setEditValue3] = useState('');
-    const [editValue4, setEditValue4] = useState('');
-    const [editValue5, setEditValue5] = useState('');
+    const [editValue4, setEditValue4] = useState<any>(null);
+    const [editValue5, setEditValue5] = useState<any>(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [isUploading, setIsUploading] = useState(false);
 
@@ -59,27 +59,28 @@ const DataTableWithCRUD = ({
         if (singleInput) {
             onAdd(inputValue); // Send only inputValue
         } else {
-            onAdd(inputValue, inputValue2, inputValue3, inputValue4, inputValue5);// Tambah value kode dari inputValue2
+            onAdd(inputValue, inputValue2, inputValue3, inputValue4?.id, inputValue5);
         }
         setInputValue('');
         setInputValue2('');
         setInputValue3('');
         setInputValue4(null);
-        setInputValue5('');
+        setInputValue5(null);
         setVisibleAdd(false);
     };
 
     const handleUpdate = () => {
+        console.log("Data sebelum diupdate:", selectedRow);
         if (singleInput) {
             onUpdate(selectedRow[idField], editValue);// Send only inputValue
         } else {
-            onUpdate(selectedRow[idField], editValue, editValue2, editValue3, editValue4, editValue5);// Tambah value kode dari inputValue2
+            onUpdate(selectedRow[idField], editValue, editValue2, editValue3, editValue4?.id, editValue5);
         }
         setEditValue('');
         setEditValue2('');
         setEditValue3('');
-        setEditValue4('');
-        setEditValue5('');
+        setEditValue4(null);
+        setEditValue5(null);
         setVisibleEdit(false);
     };
 
@@ -196,7 +197,7 @@ const DataTableWithCRUD = ({
                                 id="inputValue5"
                                 value={inputValue5}
                                 onChange={(e) => setInputValue5(e.target.value)}
-                                required className="w-full"
+                                className="w-full"
                             />
                         </div>
                         <div className='flex flex-column sm:flex-row justify-content-end mt-3'>
@@ -210,54 +211,61 @@ const DataTableWithCRUD = ({
                 .filter(value => value)
                 .join(", ")}`} visible={visibleEdit} style={{ width: '90vw', maxWidth: '500px' }} onHide={() => setVisibleEdit(false)}>
                 <div className="p-fluid">
-                    <label htmlFor="inputValue" className='font-bold'>{inputLabel}</label>
-                    <InputText
-                        id="inputValue"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        required className="w-full"
-                    />
-                </div>
-                <div className="field">
-                    <label htmlFor="inputValue2" className='font-bold'>{inputLabel2}</label>
-                    <InputText
-                        id="inputValue2"
-                        value={inputValue2}
-                        onChange={(e) => setInputValue2(e.target.value)}
-                        required className="w-full"
-                    />
-                </div>
-                <div className="field">
-                    <label htmlFor="inputValue3" className='font-bold'>{inputLabel3}</label>
-                    <InputText
-                        id="inputValue3"
-                        value={inputValue3}
-                        onChange={(e) => setInputValue3(e.target.value)}
-                        required className="w-full"
-                    />
-                </div>
-                {!singleInput && (
                     <div className="field">
-                        <label htmlFor="dropdown" className='font-bold'>{inputLabel4}</label>
-                        <Dropdown
-                            id="dropdown"
-                            value={inputValue4}
-                            options={data2}
-                            onChange={(e) => setInputValue4(e.value)}
-                            optionLabel='gambar'
-                            placeholder="Pilih Opsi"
+                        <label htmlFor="inputValue" className='font-bold'>{inputLabel}</label>
+                        <InputText
+                            id="inputValue"
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            required className="w-full"
+                        />
+                    </div>
+                    <div className="field">
+                        <label htmlFor="editValue2" className='font-bold'>{inputLabel2}</label>
+                        <InputText
+                            id="editValue2"
+                            value={editValue2}
+                            onChange={(e) => setEditValue2(e.target.value)}
+                            required className="w-full"
+                        />
+                    </div>
+                    <div className="field">
+                        <label htmlFor="editValue3" className='font-bold'>{inputLabel3}</label>
+                        <InputText
+                            id="editValue3"
+                            value={editValue3}
+                            onChange={(e) => setEditValue3(e.target.value)}
+                            required className="w-full"
+                        />
+                    </div>
+                    {!singleInput && (
+                        <div className="field">
+                            <label htmlFor="dropdown" className='font-bold'>{inputLabel4}</label>
+                            <Dropdown
+                                id="dropdown"
+                                value={editValue4}
+                                options={data4}
+                                onChange={(e) => setEditValue4(e.value)}
+                                optionLabel='id'
+                                placeholder="Pilih Opsi"
+                                className="w-full"
+                            />
+                            {editValue4 && (
+                                <div className="mt-2 p-2 border border-gray-300 rounded">
+                                    <p><strong>Gambar:</strong> {editValue4.gambar}</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    <div className="field">
+                        <label htmlFor="editValue5" className='font-bold'>{inputLabel5}</label>
+                        <InputText
+                            id="editValue5"
+                            value={editValue5}
+                            onChange={(e) => setEditValue5(e.target.value)}
                             className="w-full"
                         />
                     </div>
-                )}
-                <div className="field">
-                    <label htmlFor="inputValue5" className='font-bold'>{inputLabel5}</label>
-                    <InputText
-                        id="inputValue5"
-                        value={inputValue5}
-                        onChange={(e) => setInputValue5(e.target.value)}
-                        required className="w-full"
-                    />
                 </div>
                 <div className='flex flex-column sm:flex-row justify-content-end mt-3'>
                     <Button label="Batal" icon="pi pi-times" onClick={() => setVisibleEdit(false)} className="p-button-text w-full sm:w-3 mb-2 sm:mb-0 sm:mr-2 " />

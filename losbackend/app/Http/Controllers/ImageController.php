@@ -13,9 +13,11 @@ class ImageController extends Controller
 {
     public function tambahImage(Request $request)
     {
+        Log::info($request);
+        Log::info('Data yang diterima:', $request->all()); // Log data masuk
         $request->validate([
-            'id_section' => 'required|numeric', 
-            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'id_section' => 'required|numeric',
+            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         return DB::transaction(function () use ($request) {
@@ -23,11 +25,7 @@ class ImageController extends Controller
 
             DB::table('section_gambar')->lockForUpdate()->get();
 
-            // $kodeTerakhir = Image::max('id_section');
-            // $nomorBaru = ($kodeTerakhir ?? 0) + 1;
-            // $data->id_section = $nomorBaru;
-
-            $data->id_section = $request-> input('id_section');
+            $data->id_section = $request->input('id_section');
 
             if ($request->hasFile('gambar')) {
                 $fileName = $request->file('gambar')->getClientOriginalName();
@@ -68,16 +66,15 @@ class ImageController extends Controller
                 'image' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             ]);
 
-            $oldImagePath = 'images/' . $data->image; 
+            $oldImagePath = 'images/' . $data->image;
             if ($data->image && file_exists(public_path($oldImagePath))) {
-                unlink(public_path($oldImagePath)); 
+                unlink(public_path($oldImagePath));
             }
 
             $file = $request->file('image');
             $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('images'), $filename);
             $data->image = 'images/' . $filename;
-            
         }
 
         $data->save();
@@ -86,13 +83,13 @@ class ImageController extends Controller
 
     public function deleteImage($id)
     {
-        $data = Image::where('Kode', $id)->first();
+        $data = Image::where('id', $id)->first();
         if (!$data) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }
 
-        if ($data->Image && Storage::disk('public')->exists($data->Image)) {
-            Storage::disk('public')->delete($data->Image);
+        if ($data->gambar && Storage::disk('public')->exists($data->gambar)) {
+            Storage::disk('public')->delete($data->gambar);
         }
 
         $data->delete();

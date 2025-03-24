@@ -25,8 +25,8 @@ const TambahGambar = () => {
         setIsLoading(true);
         try {
             const imageResponse = await axios.get(API_ENDPOINTS.GETIMAGE);
-            console.log("Teks:", imageResponse.data.text);
-            console.log("Gambar URL:", imageResponse.data.gambar);
+            // console.log("Teks:", imageResponse.data.text);
+            // console.log("Gambar URL:", imageResponse.data.gambar);
 
             setImage(imageResponse.data);
         } catch (error) {
@@ -56,7 +56,9 @@ const TambahGambar = () => {
         }
 
         try {
+            console.log("Mengirim data:", { id_section, gambar });
             const formData = new FormData();
+            console.log("id_section sebelum append:", id_section);
             formData.append("id_section", isNaN(Number(id_section)) ? "" : String(Number(id_section)));
             formData.append("gambar", gambar);
 
@@ -105,9 +107,9 @@ const TambahGambar = () => {
         }
     };
 
-    const handleDelete = async (Kode: string) => {
+    const handleDelete = async (id: string) => {
         try {
-            await axios.delete(API_ENDPOINTS.DELETEIMAGE(Kode));
+            await axios.delete(API_ENDPOINTS.DELETEIMAGE(id));
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Gambar berhasil dihapus', life: 3000 });
             fetchData();
         } catch (error) {
@@ -140,7 +142,7 @@ const TambahGambar = () => {
                     inputLabel="Id Section"
                     inputLabel2="Gambar"
                     value1={idSection}
-                    onChange1={(event: any) => setIdSection(event.target.value)}
+                    // onChange1={(event: any) => setIdSection(event.target.value)}
                 />
             )}
         </>

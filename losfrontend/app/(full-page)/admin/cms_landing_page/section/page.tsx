@@ -35,7 +35,7 @@ const TambahSection = () => {
     const handleAdd = async (section: string, judul: string, deskripsi: string, id_gambar: number, kontak: string) => {
         try {
             console.log("Mengirim data:", { section, judul, deskripsi, id_gambar, kontak });
-            await axios.post(API_ENDPOINTS.TAMBAHSECTION, { section, judul, deskripsi, id_gambar: Number(id_gambar), kontak });
+            await axios.post(API_ENDPOINTS.TAMBAHSECTION, { section, judul, deskripsi, id_gambar, kontak });
             toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Data berhasil ditambahkan', life: 3000 });
             fetchData();
         } catch (error) {
@@ -43,7 +43,7 @@ const TambahSection = () => {
             toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Gagal menambahkan data', life: 3000 });
         }
     };
-
+    
     const handleUpdate = async (id: string, section: string, judul: string, deskripsi: string, kontak: string) => {
         try {
             await axios.put(API_ENDPOINTS.UPDATESECTION(id), { section, judul, deskripsi, kontak });
